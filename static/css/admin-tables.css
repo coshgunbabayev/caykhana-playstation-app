@@ -1,0 +1,23 @@
+.custom-card {
+    height: 150px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    position: relative;
+}
+
+.delete-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    z-index: 10;
+}
+
+.custom-card:hover .delete-btn {
+    display: block;
+}

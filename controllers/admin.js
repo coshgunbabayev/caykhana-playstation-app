@@ -7,6 +7,12 @@ import {
 } from '../database/modules/table.js'
 
 import {
+    getAllWarehouseDB,
+    createWarehouseDB,
+    deleteWarehouseDB
+} from '../database/modules/warehouse.js'
+
+import {
     getAllWithoutWarehouseDB,
     createWithoutWarehouseDB,
     deleteWithoutWarehouseDB
@@ -33,7 +39,6 @@ function login(req, res) {
         });
 
         res.cookie('token', token);
-
         res.status(200).json({});
 
     } catch (err) {
@@ -55,9 +60,8 @@ function logout(req, res) {
     };
 };
 
-async function getTables(req, res) {
+async function getTable(req, res) {
     const tables = await getAllTablesDB();
-
     res.status(200).json({
         tables
     });
@@ -72,6 +76,25 @@ async function createTable(req, res) {
 async function deleteTable(req, res) {
     const { id } = req.params;
     await deleteTableDB(id);
+    res.status(200).json({});
+};
+
+async function getWarehouse(req, res) {
+    const products = await getAllWarehouseDB();
+    res.status(200).json({
+        products
+    });
+};
+
+async function createWarehouse(req, res) {
+    const { name, sale } = req.body;
+    await createWarehouseDB(name, Number(sale));
+    res.status(200).json({});
+};
+
+async function deleteWarehouse(req, res) {
+    const { id } = req.params;
+    await deleteWarehouseDB(id);
     res.status(200).json({});
 };
 
@@ -98,9 +121,12 @@ async function deleteWithoutWarehouse(req, res) {
 export {
     login,
     logout,
-    getTables,
+    getTable,
     createTable,
     deleteTable,
+    getWarehouse,
+    createWarehouse,
+    deleteWarehouse,
     getWithoutWarehouse,
     createWithoutWarehouse,
     deleteWithoutWarehouse

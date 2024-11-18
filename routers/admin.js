@@ -4,9 +4,12 @@ const router = new Router();
 import {
     login,
     logout,
-    getTables,
+    getTable,
     createTable,
     deleteTable,
+    getWarehouse,
+    createWarehouse,
+    deleteWarehouse,
     getWithoutWarehouse,
     createWithoutWarehouse,
     deleteWithoutWarehouse
@@ -23,11 +26,18 @@ router.route('/logout')
     .delete(authenticateForApi, logout);
 
 router.route('/table')
-    .get(authenticateForApi, getTables)
+    .get(authenticateForApi, getTable)
     .post(authenticateForApi, createTable);
 
 router.route('/table/:id')
     .delete(authenticateForApi, deleteTable);
+
+router.route('/warehouse')
+    .get(authenticateForApi, getWarehouse)
+    .post(authenticateForApi, createWarehouse);
+
+router.route('/warehouse/:id')
+    .delete(authenticateForApi, deleteWarehouse);
 
 router.route('/without-warehouse')
     .get(authenticateForApi, getWithoutWarehouse)

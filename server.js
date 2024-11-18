@@ -22,7 +22,10 @@ app.listen(port, () => {
     console.log(`server is listening on port ${port}`);
 });
 
+import pageRouter from './routers/page.js';
+import adminRouter from './routers/admin.js';
+import workerRouter from './routers/worker.js';
 
-import pageRoute from './routers/page.js';
-
-app.use('/', pageRoute);
+app.use('/', pageRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/worker', workerRouter);

@@ -3,7 +3,10 @@ const router = new Router();
 
 import {
     login,
-    logout
+    logout,
+    getTables,
+    createTable,
+    deleteTable
 } from '../controllers/admin.js';
 
 import {
@@ -14,6 +17,13 @@ router.route('/login')
     .post(login);
 
 router.route('/logout')
-    .delete(authenticateForApi, logout)
+    .delete(authenticateForApi, logout);
+
+router.route('/table')
+    .get(authenticateForApi, getTables)
+    .post(authenticateForApi, createTable);
+
+router.route('/table/:id')
+    .delete(authenticateForApi, deleteTable);
 
 export default router;

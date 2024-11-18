@@ -1,5 +1,11 @@
 import jwt from 'jsonwebtoken';
 
+import {
+    getAllTablesDB,
+    createTableDB,
+    deleteTableDB
+} from '../database/modules/table.js'
+
 function login(req, res) {
     try {
         const { password } = req.body;
@@ -43,7 +49,30 @@ function logout(req, res) {
     };
 };
 
+async function getTables(req, res) {
+    const tables = await getAllTablesDB();
+
+    res.status(200).json({
+        tables
+    });
+};
+
+async function createTable(req, res) {
+    const { name } = req.body;
+    await createTableDB(name, 0);
+    res.status(200).json({});
+};
+
+async function deleteTable(req, res) {
+    const { id } = req.params;
+    await deleteTableDB(id);
+    res.status(200).json({});
+};
+
 export {
     login,
-    logout
+    logout,
+    getTables,
+    createTable,
+    deleteTable
 };

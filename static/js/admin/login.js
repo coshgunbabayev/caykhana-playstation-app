@@ -23,6 +23,6 @@ loginForm.addEventListener('submit', async (e) => {
             console.log(errorData);
         }
     } catch (error) {
-        console.error('Bir hata oluştu:', error);
+        console.error('err:::', error);
     };
 });

@@ -9,7 +9,7 @@
     position: relative;
 }
 
-.delete-btn {
+.card-btn {
     position: absolute;
     bottom: 10px;
     left: 50%;
@@ -18,6 +18,6 @@
     z-index: 10;
 }
 
-.custom-card:hover .delete-btn {
+.custom-card:hover .card-btn {
     display: block;
 }

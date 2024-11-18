@@ -21,7 +21,15 @@ async function createWithoutWarehouseDB(name, sale) {
     });
 };
 
+async function deleteWithoutWarehouseDB(id) {
+    sqlcommand = "DELETE FROM withoutWarehouse WHERE(id)=(?)";
+    await db.run(sqlcommand, [id], (err) => {
+        if (err) return console.error(err.message);
+    });
+};
+
 export {
     getAllWithoutWarehouseDB,
-    createWithoutWarehouseDB
+    createWithoutWarehouseDB,
+    deleteWithoutWarehouseDB
 };

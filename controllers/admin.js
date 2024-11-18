@@ -3,12 +3,13 @@ import jwt from 'jsonwebtoken';
 import {
     getAllTablesDB,
     createTableDB,
-    deleteTableDB
+    deleteTableDB,
 } from '../database/modules/table.js'
 
 import {
     getAllWithoutWarehouseDB,
-    createWithoutWarehouseDB
+    createWithoutWarehouseDB,
+    deleteWithoutWarehouseDB
 } from '../database/modules/without-warehouse.js'
 
 function login(req, res) {
@@ -84,10 +85,15 @@ async function getWithoutWarehouse(req, res) {
 
 async function createWithoutWarehouse(req, res) {
     const { name, sale } = req.body;
-    // await createTableDB(name, 0);
     await createWithoutWarehouseDB(name, Number(sale));
     res.status(200).json({});
-}
+};
+
+async function deleteWithoutWarehouse(req, res) {
+    const { id } = req.params;
+    await deleteWithoutWarehouseDB(id);
+    res.status(200).json({});
+};
 
 export {
     login,
@@ -96,5 +102,6 @@ export {
     createTable,
     deleteTable,
     getWithoutWarehouse,
-    createWithoutWarehouse
+    createWithoutWarehouse,
+    deleteWithoutWarehouse
 };

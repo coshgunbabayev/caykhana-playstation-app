@@ -7,7 +7,8 @@ import {
 } from '../database/modules/table.js'
 
 import {
-    getAllWithoutWarehouseDB
+    getAllWithoutWarehouseDB,
+    createWithoutWarehouseDB
 } from '../database/modules/without-warehouse.js'
 
 function login(req, res) {
@@ -81,11 +82,19 @@ async function getWithoutWarehouse(req, res) {
     });
 };
 
+async function createWithoutWarehouse(req, res) {
+    const { name, sale } = req.body;
+    // await createTableDB(name, 0);
+    await createWithoutWarehouseDB(name, Number(sale));
+    res.status(200).json({});
+}
+
 export {
     login,
     logout,
     getTables,
     createTable,
     deleteTable,
-    getWithoutWarehouse
+    getWithoutWarehouse,
+    createWithoutWarehouse
 };

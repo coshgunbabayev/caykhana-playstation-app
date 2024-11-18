@@ -7,7 +7,8 @@ import {
     getTables,
     createTable,
     deleteTable,
-    getWithoutWarehouse
+    getWithoutWarehouse,
+    createWithoutWarehouse
 } from '../controllers/admin.js';
 
 import {
@@ -29,5 +30,6 @@ router.route('/table/:id')
 
 router.route('/without-warehouse')
     .get(authenticateForApi, getWithoutWarehouse)
+    .post(authenticateForApi, createWithoutWarehouse);
 
 export default router;

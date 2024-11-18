@@ -6,6 +6,10 @@ import {
     deleteTableDB
 } from '../database/modules/table.js'
 
+import {
+    getAllWithoutWarehouseDB
+} from '../database/modules/without-warehouse.js'
+
 function login(req, res) {
     try {
         const { password } = req.body;
@@ -69,10 +73,19 @@ async function deleteTable(req, res) {
     res.status(200).json({});
 };
 
+async function getWithoutWarehouse(req, res) {
+    const products = await getAllWithoutWarehouseDB();
+
+    res.status(200).json({
+        products
+    });
+};
+
 export {
     login,
     logout,
     getTables,
     createTable,
-    deleteTable
+    deleteTable,
+    getWithoutWarehouse
 };

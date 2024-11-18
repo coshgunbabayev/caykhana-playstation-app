@@ -1,0 +1,57 @@
+<div class="container mt-4">
+    <div class="row bg-light py-2 rounded border mt-2">
+        <input type="text" id="searchInput" class="form-control col-12" placeholder="Ürün adı yazın..."
+            oninput="searchProduct()">
+    </div>
+    <div class="row bg-primary text-white fw-bold py-2 rounded">
+        <div class="col-6">Məhsulun adı</div>
+        <div class="col-6">Satış qiyməti</div>
+    </div>
+    <div id="productList"> </div>
+</div>
+
+<script>
+    function displayProducts(productList) {
+        const productListDiv = document.getElementById('productList');
+        productListDiv.innerHTML = '';
+        productList.forEach(product => {
+            productListDiv.innerHTML += `
+          <div class="row bg-light py-2 rounded border mt-2">
+            <div class="col-6">${product.name}</div>
+            <div class="col-6">${product.sale}</div>
+          </div>
+        `;
+        });
+    };
+
+    async function getProducts() {
+        let res = await fetch('/api/admin/without-warehouse', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (res.ok) {
+            res = await res.json();
+            return res.products
+        } else {
+            return [];
+        };
+    };
+
+    let products = [];
+    document.addEventListener("DOMContentLoaded", async function () {
+        products = await getProducts();
+        displayProducts(products);
+    });
+
+    function searchProduct() {
+        const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+        const filteredProducts = products.filter(product =>
+            product.name.toLowerCase().includes(searchQuery)
+        );
+        displayProducts(filteredProducts);
+    };
+
+</script>

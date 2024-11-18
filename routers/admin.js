@@ -6,7 +6,8 @@ import {
     logout,
     getTables,
     createTable,
-    deleteTable
+    deleteTable,
+    getWithoutWarehouse
 } from '../controllers/admin.js';
 
 import {
@@ -25,5 +26,8 @@ router.route('/table')
 
 router.route('/table/:id')
     .delete(authenticateForApi, deleteTable);
+
+router.route('/without-warehouse')
+    .get(authenticateForApi, getWithoutWarehouse)
 
 export default router;

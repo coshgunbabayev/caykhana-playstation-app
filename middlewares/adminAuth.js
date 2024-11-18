@@ -4,7 +4,6 @@ function authenticateForPage(req, res, next) {
     const { token } = req.cookies;
 
     if (!token) {
-        console.log(123);
         return res.redirect('/login');
     };
 
@@ -12,12 +11,10 @@ function authenticateForPage(req, res, next) {
     try {
         decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
-        console.log(345);
         return res.redirect('/login');
     };
 
     if (decoded.id !== process.env.ID) {
-        console.log(3434343);
         return res.redirect('/login');
     };
 

@@ -5,6 +5,10 @@ const nameInput = document.getElementById('name');
 const nameError = document.getElementById('nameError');
 const saleInput = document.getElementById('sale');
 const saleError = document.getElementById('saleError');
+const editNameInput = document.getElementById('editName');
+const editNameError = document.getElementById('editNameError');
+const editSaleInput = document.getElementById('editSale');
+const editSaleError = document.getElementById('editSaleError');
 
 
 function displayProducts(productList) {
@@ -78,13 +82,13 @@ addProductForm.addEventListener('submit', async (e) => {
             if (res.name) {
                 switch (res.name) {
                     case 'nameIsRequired':
-                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
-                        nameError.innerText = 'Ad məcburidir';
+                        editNameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editNameError.innerText = 'Ad məcburidir';
                         break;
 
                     case 'nameIsUsed':
-                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
-                        nameError.innerText = 'Ad istifadə olunub';
+                        editNameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editNameError.innerText = 'Ad istifadə olunub';
                         break;
                 };
             };
@@ -92,17 +96,17 @@ addProductForm.addEventListener('submit', async (e) => {
             if (res.sale) {
                 switch (res.sale) {
                     case 'saleIsRequired':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
                         saleError.innerText = 'Satış qiyməti məcburidir';
                         break;
 
                     case 'saleIsNotNumber':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
                         saleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
                         break;
 
                     case 'saleIsNotPositive':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
                         saleError.innerText = 'Satış qiyməti müsbət olmalıdır';
                         break;
                 };
@@ -147,7 +151,39 @@ editProductForm.addEventListener('submit', async (e) => {
             document.location.reload();
         } else {
             res = await res.json();
-            console.log(res);
+
+            if (res.name) {
+                switch (res.name) {
+                    case 'nameIsRequired':
+                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        nameError.innerText = 'Ad məcburidir';
+                        break;
+
+                    case 'nameIsUsed':
+                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        nameError.innerText = 'Ad istifadə olunub';
+                        break;
+                };
+            };
+
+            if (res.sale) {
+                switch (res.sale) {
+                    case 'saleIsRequired':
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleError.innerText = 'Satış qiyməti məcburidir';
+                        break;
+
+                    case 'saleIsNotNumber':
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
+                        break;
+
+                    case 'saleIsNotPositive':
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleError.innerText = 'Satış qiyməti müsbət olmalıdır';
+                        break;
+                };
+            };
         }
     } catch (err) {
         console.error('Hata:', err);

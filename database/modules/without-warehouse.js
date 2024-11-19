@@ -12,6 +12,16 @@ async function getAllWithoutWarehouseDB() {
     });
 };
 
+async function getWithoutWarehouseDB(param, value) {
+    return await new Promise((resolve, reject) => {
+        sqlcommand = `SELECT * FROM withoutWarehouse WHERE ${param} = ?`;
+        db.get(sqlcommand, [value], (err, data) => {
+            if (err) { reject(err); }
+            else { resolve(data); }
+        });
+    });
+};
+
 async function createWithoutWarehouseDB(name, sale) {
     sqlcommand = `INSERT INTO withoutWarehouse (name, sale) VALUES ('${name}', ${sale})`;
     await db.run(sqlcommand, (err) => {
@@ -37,6 +47,7 @@ async function deleteWithoutWarehouseDB(id) {
 
 export {
     getAllWithoutWarehouseDB,
+    getWithoutWarehouseDB,
     createWithoutWarehouseDB,
     updateWithoutWarehouseDB,
     deleteWithoutWarehouseDB

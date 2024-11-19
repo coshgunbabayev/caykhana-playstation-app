@@ -12,6 +12,16 @@ async function getAllWarehouseDB() {
     });
 };
 
+async function getWarehouseDB(param, value) {
+    return await new Promise((resolve, reject) => {
+        sqlcommand = `SELECT * FROM warehouse WHERE ${param} = ?`;
+        db.get(sqlcommand, [value], (err, data) => {
+            if (err) { reject(err); }
+            else { resolve(data); }
+        });
+    });
+};
+
 async function createWarehouseDB(name, sale) {
     sqlcommand = `INSERT INTO warehouse (name, quatity, purchase, sale) VALUES ('${name}', ${0}, ${0}, ${sale})`;
     await db.run(sqlcommand, (err) => {
@@ -37,6 +47,7 @@ async function deleteWarehouseDB(id) {
 
 export {
     getAllWarehouseDB,
+    getWarehouseDB,
     createWarehouseDB,
     updateWarehouseDB,
     deleteWarehouseDB

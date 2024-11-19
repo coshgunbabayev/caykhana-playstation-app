@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import {
-    getAllTablesDB,
+    getAllTableDB,
     createTableDB,
     deleteTableDB,
 } from '../database/modules/table.js'
@@ -63,7 +63,7 @@ function logout(req, res) {
 };
 
 async function getTable(req, res) {
-    const tables = await getAllTablesDB();
+    const tables = await getAllTableDB();
     res.status(200).json({
         tables
     });

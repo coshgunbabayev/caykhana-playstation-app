@@ -82,13 +82,13 @@ addProductForm.addEventListener('submit', async (e) => {
             if (res.name) {
                 switch (res.name) {
                     case 'nameIsRequired':
-                        editNameInput.style.borderColor = 'rgb(255, 0, 0)';
-                        editNameError.innerText = 'Ad məcburidir';
+                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        nameError.innerText = 'Ad məcburidir';
                         break;
 
                     case 'nameIsUsed':
-                        editNameInput.style.borderColor = 'rgb(255, 0, 0)';
-                        editNameError.innerText = 'Ad istifadə olunub';
+                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        nameError.innerText = 'Ad istifadə olunub';
                         break;
                 };
             };
@@ -96,18 +96,18 @@ addProductForm.addEventListener('submit', async (e) => {
             if (res.sale) {
                 switch (res.sale) {
                     case 'saleIsRequired':
-                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        saleError.innerText = 'Satış qiyməti məcburidir';
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleError.innerText = 'Satış qiyməti məcburidir';
                         break;
 
                     case 'saleIsNotNumber':
-                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        saleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
                         break;
 
                     case 'saleIsNotPositive':
-                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        saleError.innerText = 'Satış qiyməti müsbət olmalıdır';
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editSaleError.innerText = 'Satış qiyməti müsbət olmalıdır';
                         break;
                 };
             };
@@ -155,13 +155,13 @@ editProductForm.addEventListener('submit', async (e) => {
             if (res.name) {
                 switch (res.name) {
                     case 'nameIsRequired':
-                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
-                        nameError.innerText = 'Ad məcburidir';
+                        editNameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editNameError.innerText = 'Ad məcburidir';
                         break;
 
                     case 'nameIsUsed':
-                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
-                        nameError.innerText = 'Ad istifadə olunub';
+                        editNameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        editNameError.innerText = 'Ad istifadə olunub';
                         break;
                 };
             };
@@ -169,18 +169,18 @@ editProductForm.addEventListener('submit', async (e) => {
             if (res.sale) {
                 switch (res.sale) {
                     case 'saleIsRequired':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        editSaleError.innerText = 'Satış qiyməti məcburidir';
+                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        saleError.innerText = 'Satış qiyməti məcburidir';
                         break;
 
                     case 'saleIsNotNumber':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        editSaleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
+                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        saleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
                         break;
 
                     case 'saleIsNotPositive':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        editSaleError.innerText = 'Satış qiyməti müsbət olmalıdır';
+                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        saleError.innerText = 'Satış qiyməti müsbət olmalıdır';
                         break;
                 };
             };

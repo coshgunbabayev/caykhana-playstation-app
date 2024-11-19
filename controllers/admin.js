@@ -110,7 +110,7 @@ async function createWarehouse(req, res) {
 
     if (!name) {
         err.name = 'nameIsRequired';
-    } else if (await getWarehouseDB('name', name)) {
+    } else if (await getWarehouseDB('name', name) || await getWithoutWarehouseDB('name', name)) {
         err.name = 'nameIsUsed';
     };
 
@@ -133,6 +133,26 @@ async function createWarehouse(req, res) {
 async function updateWarehouse(req, res) {
     const { id } = req.params;
     const { name, sale } = req.body;
+    const err = new Object();
+
+    if (!name) {
+        err.name = 'nameIsRequired';
+    } else if ((await getWarehouseDB('name', name) && (await getWarehouseDB('name', name)).id != id) || await getWithoutWarehouseDB('name', name)) {
+        err.name = 'nameIsUsed';
+    };
+
+    if (!sale) {
+        err.sale = 'saleIsRequired';
+    } else if (isNaN(Number(sale))) {
+        err.sale = 'saleIsNotNumber';
+    } else if (Number(sale) <= 0) {
+        err.sale = 'saleIsNotPositive';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
     await updateWarehouseDB(Number(id), name, Number(sale));
     res.status(200).json({});
 };
@@ -156,7 +176,7 @@ async function createWithoutWarehouse(req, res) {
 
     if (!name) {
         err.name = 'nameIsRequired';
-    } else if (await getWithoutWarehouseDB('name', name)) {
+    } else if (await getWithoutWarehouseDB('name', name) || await getWarehouseDB('name', name)) {
         err.name = 'nameIsUsed';
     };
 
@@ -179,6 +199,26 @@ async function createWithoutWarehouse(req, res) {
 async function updateWithoutWarehouse(req, res) {
     const { id } = req.params;
     const { name, sale } = req.body;
+    const err = new Object();
+
+    if (!name) {
+        err.name = 'nameIsRequired';
+    } else if ((await getWithoutWarehouseDB('name', name) && (await getWithoutWarehouseDB('name', name)).id != id) || await getWarehouseDB('name', name)) {
+        err.name = 'nameIsUsed';
+    };
+
+    if (!sale) {
+        err.sale = 'saleIsRequired';
+    } else if (isNaN(Number(sale))) {
+        err.sale = 'saleIsNotNumber';
+    } else if (Number(sale) <= 0) {
+        err.sale = 'saleIsNotPositive';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
     await updateWithoutWarehouseDB(Number(id), name, Number(sale));
     res.status(200).json({});
 };

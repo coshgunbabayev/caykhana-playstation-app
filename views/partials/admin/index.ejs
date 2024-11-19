@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
-    <%- include('partials/links/bootstrap') %>
+    <%- include('../links/bootstrap') %>
 
-        <%- include('partials/links/' + activePage) %>
+        <%- include('../links/' + activePage) %>
 </head>
 
 <body>
-    <%- include('partials/navbar/admin') %>
+    <%- include('../navbar/admin') %>
 
-        <%- include('partials/admin/' + activePage) %>
+        <%- include('../admin/' + activePage) %>
 
             <script src="/js/admin/logout.js"></script>
 </body>

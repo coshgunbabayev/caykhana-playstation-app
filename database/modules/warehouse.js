@@ -21,6 +21,13 @@ async function createWarehouseDB(name, sale) {
     });
 };
 
+async function updateWarehouseDB(id, name, sale) {
+    sqlcommand = `UPDATE warehouse SET name = '${name}', sale = ${sale} WHERE id = ${id}`;
+    await db.run(sqlcommand, [], (err) => {
+        if (err) return console.error(err.message);
+    });
+};
+
 async function deleteWarehouseDB(id) {
     sqlcommand = "DELETE FROM warehouse WHERE(id)=(?)";
     await db.run(sqlcommand, [id], (err) => {
@@ -31,5 +38,6 @@ async function deleteWarehouseDB(id) {
 export {
     getAllWarehouseDB,
     createWarehouseDB,
+    updateWarehouseDB,
     deleteWarehouseDB
 };

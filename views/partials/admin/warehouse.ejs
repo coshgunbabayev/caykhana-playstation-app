@@ -21,6 +21,8 @@
     <div id="productList"> </div>
 </div>
 
+
+<!-- elave etmek -->
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -64,108 +66,45 @@
         </div>
     </div>
 </div>
+<!--  -->
 
-<script>
-    const productListDiv = document.getElementById('productList');
-    const addProductForm = document.getElementById('addProductForm');
-
-    function displayProducts(productList) {
-        productListDiv.innerHTML = '';
-        productList.forEach(product => {
-            productListDiv.innerHTML += `
-          <div class="row bg-light py-2 rounded border mt-2">
-            <div class="col-4">${product.name}</div>
-            <div class="col-2">${product.quatity}</div>
-            <div class="col-2">${product.purchase}</div>
-            <div class="col-2">${product.sale}</div>
-            <div class="col-2 text-center">
-                <button class="btn btn-warning btn-sm mx-1" onclick="editProduct('${product.id}')">Düzenle</button>
-                <button class="btn btn-danger btn-sm mx-1" onclick="deleteProduct('${product.id}')">Sil</button>
+<!-- redakte -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Məhsulu redaktə et</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          </div>
-        `;
-        });
-    };
+            <div class="modal-body">
+                <form id="editProductForm">
+                    <div class="row gy-2 overflow-hidden">
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="name" id="editName" placeholder="Ad">
+                                <label for="editName" class="form-label">Ad</label>
+                                <div class="fs-6 invalid-feedback" id="editNameError"></div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" name="sale" id="editSale"
+                                    placeholder="Qiymət">
+                                <label for="editSale" class="form-label">Qiymət</label>
+                                <div class="fs-6 invalid-feedback" id="editSaleError"></div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-grid my-3">
+                                <button class="btn btn-primary btn-lg" type="submit">Yadda saxla</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- -->
 
-    async function getProducts() {
-        let res = await fetch('/api/admin/warehouse', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (res.ok) {
-            res = await res.json();
-            return res.products;
-        } else {
-            return [];
-        };
-    };
-
-    let products = [];
-    document.addEventListener("DOMContentLoaded", async function () {
-        products = await getProducts();
-        displayProducts(products);
-    });
-
-    function searchProduct() {
-        const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-        const filteredProducts = products.filter(product =>
-            product.name.toLowerCase().includes(searchQuery)
-        );
-        displayProducts(filteredProducts);
-    };
-
-    addProductForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(addProductForm);
-
-        try {
-            let res = await fetch('/api/admin/warehouse', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: formData.get('name'),
-                    sale: formData.get('sale')
-                })
-            });
-
-            if (res.ok) {
-                document.location.reload();
-            } else {
-                res = await res.json();
-                alert(res);
-            };
-        } catch (err) {
-            console.error('err:::', error);
-        };
-    });
-
-    function editProduct(id) {
-    }
-
-    async function deleteProduct(id) {
-        if (!confirm('Məhsul silinsin?')) {
-            return;
-        };
-
-        let res = await fetch(`/api/admin/warehouse/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (res.ok) {
-            document.location.reload();
-        } else {
-            res = await res.json();
-
-            alert(res);
-        };
-    };
-</script>
+<script src="/js/admin/warehouse.js"></script>

@@ -3,29 +3,29 @@ function getIndex(req, res) {
 };
 
 function getAdminLogin(req, res) {
-    res.status(200).render('admin-login');
+    res.status(200).render('partials/admin/login');
 };
 
 function getAdmin(req, res) {
-    res.status(200).render('admin', {
+    res.status(200).render('partials/admin/index', {
         activePage: 'home'
     });
 };
 
 function getTables(req, res) {
-    res.status(200).render('admin', {
+    res.status(200).render('partials/admin/index', {
         activePage: 'tables'
     });
 };
 
 function getWarehouse(req, res) {
-    res.status(200).render('admin', {
+    res.status(200).render('partials/admin/index', {
         activePage: 'warehouse'
     });
 };
 
 function getWithoutWarehouse(req, res) {
-    res.status(200).render('admin', {
+    res.status(200).render('partials/admin/index', {
         activePage: 'without-warehouse'
     });
 };

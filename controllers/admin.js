@@ -9,12 +9,14 @@ import {
 import {
     getAllWarehouseDB,
     createWarehouseDB,
+    updateWarehouseDB,
     deleteWarehouseDB
 } from '../database/modules/warehouse.js'
 
 import {
     getAllWithoutWarehouseDB,
     createWithoutWarehouseDB,
+    updateWithoutWarehouseDB,
     deleteWithoutWarehouseDB
 } from '../database/modules/without-warehouse.js'
 
@@ -92,6 +94,13 @@ async function createWarehouse(req, res) {
     res.status(200).json({});
 };
 
+async function updateWarehouse(req, res) {
+    const { id } = req.params;
+    const { name, sale } = req.body;
+    await updateWarehouseDB(Number(id), name, Number(sale));
+    res.status(200).json({});
+};
+
 async function deleteWarehouse(req, res) {
     const { id } = req.params;
     await deleteWarehouseDB(id);
@@ -112,6 +121,13 @@ async function createWithoutWarehouse(req, res) {
     res.status(200).json({});
 };
 
+async function updateWithoutWarehouse(req, res) {
+    const { id } = req.params;
+    const { name, sale } = req.body;
+    await updateWithoutWarehouseDB(Number(id), name, Number(sale));
+    res.status(200).json({});
+};
+
 async function deleteWithoutWarehouse(req, res) {
     const { id } = req.params;
     await deleteWithoutWarehouseDB(id);
@@ -126,8 +142,10 @@ export {
     deleteTable,
     getWarehouse,
     createWarehouse,
+    updateWarehouse,
     deleteWarehouse,
     getWithoutWarehouse,
     createWithoutWarehouse,
+    updateWithoutWarehouse,
     deleteWithoutWarehouse
 };

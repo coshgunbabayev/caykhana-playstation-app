@@ -2,12 +2,14 @@ import jwt from 'jsonwebtoken';
 
 import {
     getAllTableDB,
+    getTableDB,
     createTableDB,
     deleteTableDB,
 } from '../database/modules/table.js'
 
 import {
     getAllWarehouseDB,
+    getWarehouseDB,
     createWarehouseDB,
     updateWarehouseDB,
     deleteWarehouseDB
@@ -15,6 +17,7 @@ import {
 
 import {
     getAllWithoutWarehouseDB,
+    getWithoutWarehouseDB,
     createWithoutWarehouseDB,
     updateWithoutWarehouseDB,
     deleteWithoutWarehouseDB
@@ -71,6 +74,19 @@ async function getTable(req, res) {
 
 async function createTable(req, res) {
     const { name } = req.body;
+
+    if (!name) {
+        return res.status(400).json({
+            name: 'nameIsRequired'
+        });
+    };
+
+    if (await getTableDB('name', name)) {
+        return res.status(400).json({
+            name: 'nameIsUsed'
+        });
+    };
+
     await createTableDB(name, 0);
     res.status(200).json({});
 };
@@ -90,6 +106,26 @@ async function getWarehouse(req, res) {
 
 async function createWarehouse(req, res) {
     const { name, sale } = req.body;
+    const err = new Object();
+
+    if (!name) {
+        err.name = 'nameIsRequired';
+    } else if (await getWarehouseDB('name', name)) {
+        err.name = 'nameIsUsed';
+    };
+
+    if (!sale) {
+        err.sale = 'saleIsRequired';
+    } else if (isNaN(Number(sale))) {
+        err.sale = 'saleIsNotNumber';
+    } else if (Number(sale) <= 0) {
+        err.sale = 'saleIsNotPositive';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
     await createWarehouseDB(name, Number(sale));
     res.status(200).json({});
 };
@@ -109,7 +145,6 @@ async function deleteWarehouse(req, res) {
 
 async function getWithoutWarehouse(req, res) {
     const products = await getAllWithoutWarehouseDB();
-
     res.status(200).json({
         products
     });
@@ -117,6 +152,26 @@ async function getWithoutWarehouse(req, res) {
 
 async function createWithoutWarehouse(req, res) {
     const { name, sale } = req.body;
+    const err = new Object();
+
+    if (!name) {
+        err.name = 'nameIsRequired';
+    } else if (await getWithoutWarehouseDB('name', name)) {
+        err.name = 'nameIsUsed';
+    };
+
+    if (!sale) {
+        err.sale = 'saleIsRequired';
+    } else if (isNaN(Number(sale))) {
+        err.sale = 'saleIsNotNumber';
+    } else if (Number(sale) <= 0) {
+        err.sale = 'saleIsNotPositive';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
     await createWithoutWarehouseDB(name, Number(sale));
     res.status(200).json({});
 };

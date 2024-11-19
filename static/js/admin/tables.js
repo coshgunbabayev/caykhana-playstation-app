@@ -1,5 +1,7 @@
 const tablesDiv = document.getElementById('tablesDiv');
 const addTabelForm = document.getElementById('addTabelForm');
+const nameInput = document.getElementById('name');
+const nameError = document.getElementById('nameError');
 
 async function getTables() {
     let res = await fetch('/api/admin/table', {
@@ -56,7 +58,19 @@ addTabelForm.addEventListener('submit', async (e) => {
         } else {
             res = await res.json();
 
-            alert(res);
+            if (res.name) {
+                switch (res.name) {
+                    case 'nameIsRequired':
+                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        nameError.innerText = 'Ad məcburidir';
+                        break;
+
+                    case 'nameIsUsed':
+                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        nameError.innerText = 'Ad istifadə olunub';
+                        break;
+                };
+            };
         };
     } catch (err) {
         console.error('err:::', error);

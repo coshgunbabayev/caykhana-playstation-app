@@ -1,6 +1,11 @@
 const productListDiv = document.getElementById('productList');
 const addProductForm = document.getElementById('addProductForm');
 const editProductForm = document.getElementById('editProductForm');
+const nameInput = document.getElementById('name');
+const nameError = document.getElementById('nameError');
+const saleInput = document.getElementById('sale');
+const saleError = document.getElementById('saleError');
+
 
 function displayProducts(productList) {
     productListDiv.innerHTML = '';
@@ -69,7 +74,39 @@ addProductForm.addEventListener('submit', async (e) => {
             document.location.reload();
         } else {
             res = await res.json();
-            alert(res);
+
+            if (res.name) {
+                switch (res.name) {
+                    case 'nameIsRequired':
+                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        nameError.innerText = 'Ad məcburidir';
+                        break;
+
+                    case 'nameIsUsed':
+                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                        nameError.innerText = 'Ad istifadə olunub';
+                        break;
+                };
+            };
+
+            if (res.sale) {
+                switch (res.sale) {
+                    case 'saleIsRequired':
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        saleError.innerText = 'Satış qiyməti məcburidir';
+                        break;
+
+                    case 'saleIsNotNumber':
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        saleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
+                        break;
+
+                    case 'saleIsNotPositive':
+                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
+                        saleError.innerText = 'Satış qiyməti müsbət olmalıdır';
+                        break;
+                };
+            };
         };
     } catch (err) {
         console.error('err:::', err);
@@ -110,7 +147,7 @@ editProductForm.addEventListener('submit', async (e) => {
             document.location.reload();
         } else {
             res = await res.json();
-            alert(res);
+            console.log(res);
         }
     } catch (err) {
         console.error('Hata:', err);
@@ -135,6 +172,6 @@ async function deleteProduct(id) {
     } else {
         res = await res.json();
 
-        alert(res);
+        console.log(res);
     };
 };

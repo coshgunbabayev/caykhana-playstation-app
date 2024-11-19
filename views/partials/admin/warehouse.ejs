@@ -11,11 +11,11 @@
     </div>
 
     <div class="row bg-primary text-white fw-bold py-2 rounded mt-2">
-        <div class="col-4">Məhsulun adı</div>
+        <div class="col-3">Məhsulun adı</div>
         <div class="col-2">Say</div>
         <div class="col-2">Alış qiyməti</div>
         <div class="col-2">Satış qiyməti</div>
-        <div class="col-2 text-center">Ayarlar</div>
+        <div class="col-3 text-center">Ayarlar</div>
     </div>
 
     <div id="productList"> </div>
@@ -68,6 +68,55 @@
 </div>
 <!--  -->
 
+<!-- artirma -->
+<div class="modal fade" id="increaseProductModal" tabindex="-1" aria-labelledby="increaseProductModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="increaseProductModalLabel">Məhsulu artır</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="increaseProductForm">
+                    <div class="row gy-2 overflow-hidden">
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="quantity" id="increaseQuantity"
+                                    placeholder="Say">
+                                <label for="increaseQuantity" class="form-label">Say</label>
+                                <div class="error" id="increaseQuantityError"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="purchase" id="increasePurchase"
+                                    placeholder="Ad">
+                                <label for="increasePurchase" class="form-label">Alış qiyməti</label>
+                                <div class="error" id="increasePurchaseError"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-grid my-3">
+                                <button class="btn btn-primary btn-lg" type="submit">Artır</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--  -->
+
 <!-- redakte -->
 <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -88,8 +137,7 @@
                         </div>
                         <div class="col-12">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="sale" id="editSale"
-                                    placeholder="Qiymət">
+                                <input type="text" class="form-control" name="sale" id="editSale" placeholder="Qiymət">
                                 <label for="editSale" class="form-label">Qiymət</label>
                                 <div class="error" id="editSaleError"></div>
                             </div>

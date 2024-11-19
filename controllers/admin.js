@@ -130,6 +130,36 @@ async function createWarehouse(req, res) {
     res.status(200).json({});
 };
 
+async function increaseWarehouse(req, res) {
+    const { id } = req.params;
+    const { quantity, purchase } = req.body;
+    const err = new Object();
+
+    if (!quantity) {
+        err.quantity = 'quantityIsRequired';
+    } else if (isNaN(Number(quantity))) {
+        err.quantity = 'quantityIsNotNumber';
+    } else if (!Number.isInteger(Number(quantity))) {
+        err.quantity = 'quantityIsNotWholeNumber';
+    } else if (Number(quantity) <= 0) {
+        err.quantity = 'quantityIsNotPositive';
+    };
+
+    if (!purchase) {
+        err.purchase = 'purchaseIsRequired';
+    } else if (isNaN(Number(purchase))) {
+        err.purchase = 'purchaseIsNotNumber';
+    } else if (Number(purchase) <= 0) {
+        err.purchase = 'purchaseIsNotPositive';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
+    res.status(200).json({});
+};
+
 async function updateWarehouse(req, res) {
     const { id } = req.params;
     const { name, sale } = req.body;
@@ -237,6 +267,7 @@ export {
     deleteTable,
     getWarehouse,
     createWarehouse,
+    increaseWarehouse,
     updateWarehouse,
     deleteWarehouse,
     getWithoutWarehouse,

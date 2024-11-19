@@ -9,6 +9,7 @@ import {
     deleteTable,
     getWarehouse,
     createWarehouse,
+    increaseWarehouse,
     updateWarehouse,
     deleteWarehouse,
     getWithoutWarehouse,
@@ -37,6 +38,9 @@ router.route('/table/:id')
 router.route('/warehouse')
     .get(authenticateForApi, getWarehouse)
     .post(authenticateForApi, createWarehouse);
+
+router.route('/warehouse/increase/:id')
+    .put(authenticateForApi, increaseWarehouse);
 
 router.route('/warehouse/:id')
     .put(authenticateForApi, updateWarehouse)

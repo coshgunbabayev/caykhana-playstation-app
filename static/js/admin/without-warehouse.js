@@ -62,58 +62,57 @@ addProductForm.addEventListener('submit', async (e) => {
 
     const formData = new FormData(addProductForm);
 
-    try {
-        let res = await fetch('/api/admin/without-warehouse', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: formData.get('name'),
-                sale: formData.get('sale')
-            })
-        });
+    nameInput.style.borderColor = '#ced4da';
+    saleInput.style.borderColor = '#ced4da';
+    nameError.innerText = '';
+    saleError.innerText = '';
 
-        if (res.ok) {
-            document.location.reload();
-        } else {
-            res = await res.json();
+    let res = await fetch('/api/admin/without-warehouse', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: formData.get('name'),
+            sale: formData.get('sale')
+        })
+    });
 
-            if (res.name) {
-                switch (res.name) {
-                    case 'nameIsRequired':
-                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
-                        nameError.innerText = 'Ad məcburidir';
-                        break;
+    if (res.ok) {
+        document.location.reload();
+    } else {
+        res = await res.json();
 
-                    case 'nameIsUsed':
-                        nameInput.style.borderColor = 'rgb(255, 0, 0)';
-                        nameError.innerText = 'Ad istifadə olunub';
-                        break;
-                };
-            };
+        if (res.name) {
+            switch (res.name) {
+                case 'nameIsRequired':
+                    nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                    nameError.innerText = 'Ad məcburidir';
+                    break;
 
-            if (res.sale) {
-                switch (res.sale) {
-                    case 'saleIsRequired':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        editSaleError.innerText = 'Satış qiyməti məcburidir';
-                        break;
-
-                    case 'saleIsNotNumber':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        editSaleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
-                        break;
-
-                    case 'saleIsNotPositive':
-                        saleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        editSaleError.innerText = 'Satış qiyməti müsbət olmalıdır';
-                        break;
-                };
+                case 'nameIsUsed':
+                    nameInput.style.borderColor = 'rgb(255, 0, 0)';
+                    nameError.innerText = 'Ad istifadə olunub';
+                    break;
             };
         };
-    } catch (err) {
-        console.error('err:::', err);
+
+        if (res.sale) {
+            saleInput.style.borderColor = 'rgb(255, 0, 0)';
+            switch (res.sale) {
+                case 'saleIsRequired':
+                    saleError.innerText = 'Satış qiyməti məcburidir';
+                    break;
+
+                case 'saleIsNotNumber':
+                    saleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
+                    break;
+
+                case 'saleIsNotPositive':
+                    saleError.innerText = 'Satış qiyməti müsbət olmalıdır';
+                    break;
+            };
+        };
     };
 });
 
@@ -121,8 +120,8 @@ function editProduct(id) {
     const product = products.find(product => product.id === id);
     if (!product) return;
 
-    document.getElementById('editName').value = product.name;
-    document.getElementById('editSale').value = product.sale;
+    editNameInput.value = product.name;
+    editSaleInput.value = product.sale;
 
     editProductForm.dataset.productId = id;
 
@@ -134,6 +133,11 @@ editProductForm.addEventListener('submit', async (e) => {
 
     const formData = new FormData(editProductForm);
     const productId = editProductForm.dataset.productId;
+
+    editNameInput.style.borderColor = '#ced4da';
+    editSaleInput.style.borderColor = '#ced4da';
+    editNameError.innerText = '';
+    editSaleError.innerText = '';
 
     try {
         let res = await fetch(`/api/admin/without-warehouse/${productId}`, {
@@ -153,34 +157,31 @@ editProductForm.addEventListener('submit', async (e) => {
             res = await res.json();
 
             if (res.name) {
+                editNameInput.style.borderColor = 'rgb(255, 0, 0)';
                 switch (res.name) {
                     case 'nameIsRequired':
-                        editNameInput.style.borderColor = 'rgb(255, 0, 0)';
                         editNameError.innerText = 'Ad məcburidir';
                         break;
 
                     case 'nameIsUsed':
-                        editNameInput.style.borderColor = 'rgb(255, 0, 0)';
                         editNameError.innerText = 'Ad istifadə olunub';
                         break;
                 };
             };
 
             if (res.sale) {
+                editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
                 switch (res.sale) {
                     case 'saleIsRequired':
-                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        saleError.innerText = 'Satış qiyməti məcburidir';
+                        editSaleError.innerText = 'Satış qiyməti məcburidir';
                         break;
 
                     case 'saleIsNotNumber':
-                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        saleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
+                        editSaleError.innerText = 'Satış qiyməti rəqəm olmalıdır';
                         break;
 
                     case 'saleIsNotPositive':
-                        editSaleInput.style.borderColor = 'rgb(255, 0, 0)';
-                        saleError.innerText = 'Satış qiyməti müsbət olmalıdır';
+                        editSaleError.innerText = 'Satış qiyməti müsbət olmalıdır';
                         break;
                 };
             };

@@ -21,7 +21,7 @@ function displayProducts(productList) {
         productListDiv.innerHTML += `
           <div class="row bg-light py-2 rounded border mt-2">
             <div class="col-3">${product.name}</div> 
-            <div class="col-2">${product.quatity}</div>  
+            <div class="col-2">${product.quantity}</div>  
             <div class="col-2">${product.purchase}</div>
             <div class="col-2">${product.sale}</div>
             <div class="col-3 text-center">
@@ -242,8 +242,6 @@ async function deleteProduct(id) {
     if (res.ok) {
         document.location.reload();
     } else {
-        res = await res.json();
-
-        alert(res);
+        alert('Bu məhsul silinə bilməz, sayı 0-dan çoxdur');
     };
 };

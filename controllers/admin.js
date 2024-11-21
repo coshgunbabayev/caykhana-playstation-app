@@ -12,6 +12,7 @@ import {
     getWarehouseDB,
     createWarehouseDB,
     updateWarehouseDB,
+    automaticUpdateQuantityAndPurchaseofWarehouseDB,
     deleteWarehouseDB
 } from '../database/modules/warehouse.js'
 
@@ -157,6 +158,16 @@ async function increaseWarehouse(req, res) {
         return res.status(400).json(err);
     };
 
+    const product = await getWarehouseDB('id', Number(id));
+
+    const originalTotalPurchase = product.quantity * product.purchase;
+    const addTotalPurchase = Number(quantity) * Number(purchase);
+    const newTotalPurchase = originalTotalPurchase + addTotalPurchase;
+    const newQuantity = product.quantity + Number(quantity);
+    const newPurchase = newTotalPurchase / newQuantity;
+
+    await automaticUpdateQuantityAndPurchaseofWarehouseDB(Number(id), newQuantity, newPurchase);
+
     res.status(200).json({});
 };
 
@@ -189,6 +200,11 @@ async function updateWarehouse(req, res) {
 
 async function deleteWarehouse(req, res) {
     const { id } = req.params;
+
+    if ((await getWarehouseDB('id', id)).quantity) {
+        return res.status(400).json({});
+    };
+    
     await deleteWarehouseDB(id);
     res.status(200).json({});
 };

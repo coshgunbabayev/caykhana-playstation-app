@@ -14,7 +14,7 @@ function getAdmin(req, res) {
 
 function getTables(req, res) {
     res.status(200).render('partials/admin/index', {
-        activePage: 'tables'
+        activePage: 'table'
     });
 };
 

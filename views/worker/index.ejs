@@ -6,16 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ana səhifə</title>
     <%- include('../links/bootstrap') %>
-    <link rel="stylesheet" href="/css/form.css">
-    <link rel="stylesheet" href="/css/table.css">
+        <link rel="stylesheet" href="/css/form.css">
+        <link rel="stylesheet" href="/css/table.css">
 </head>
 
 <body>
     <%- include('../navbar/worker') %>
 
-    <%- include('table') %>
-    
-    <script src="/js/worker/table.js"></script>
+        <%- include('table') %>
+
+            <%- include('tableDetails') %>
+
+                <script src="/js/worker/modules.js"></script>
+                <script src="/js/worker/table.js"></script>
+                <script src="/js/worker/tableDetails.js"></script>
 </body>
 
 </html>

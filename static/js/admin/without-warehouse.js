@@ -1,6 +1,7 @@
 const productListDiv = document.getElementById('productList');
 const addProductForm = document.getElementById('addProductForm');
 const editProductForm = document.getElementById('editProductForm');
+const searchInput = document.getElementById('searchInput');
 const categoryOption = document.getElementById('categoryOption');
 const categoryInputs = document.getElementById('categoryInputs');
 const nameInput = document.getElementById('name');
@@ -19,7 +20,7 @@ function displayProducts(productList) {
         productListDiv.innerHTML += `
             <div class="row bg-light py-2 rounded border mt-2">
                 <div class="col-4">${product.name}</div>
-                <div class="col-3">${product.category}</div>
+                <div class="col-3">${categories.find(category => category.en === product.category).az}</div>
                 <div class="col-2">${product.sale} azn</div>
                 <div class="col-3 text-center">
                     <button class="btn btn-warning btn-sm mx-1" onclick="editProduct(${product.id})">Redaktə et</button>
@@ -88,11 +89,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 function searchProduct() {
-    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    const searchQuery = searchInput.value.toLowerCase();
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery)
     );
     displayProducts(filteredProducts);
+    categoryOption.value = '';
 };
 
 function selectCategory() {
@@ -105,6 +107,7 @@ function selectCategory() {
         );
         displayProducts(filteredProducts);
     };
+    searchInput.value = '';
 };
 
 addProductForm.addEventListener('submit', async (e) => {

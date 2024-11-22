@@ -22,9 +22,9 @@ async function getWarehouseDB(param, value) {
     });
 };
 
-async function createWarehouseDB(name, sale) {
+async function createWarehouseDB(name, category, sale) {
     sale = Number(sale.toFixed(2));
-    sqlcommand = `INSERT INTO warehouse (name, quantity, purchase, sale) VALUES ('${name}', ${0}, ${0}, ${sale})`;
+    sqlcommand = `INSERT INTO warehouse (name, category, quantity, purchase, sale) VALUES ('${name}', '${category}', ${0}, ${0}, ${sale})`;
     await db.run(sqlcommand, (err) => {
         if (err) {
             throw new Error('')

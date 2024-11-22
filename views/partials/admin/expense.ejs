@@ -1,0 +1,67 @@
+<div class="container mt-4">
+    <div class="row bg-light py-2 rounded border">
+        <div class="col-10">
+            <input type="text" id="searchInput" class="form-control" placeholder="Məhsul axtar"
+                oninput="searchExpense()">
+        </div>
+        <div class="col-2 d-flex align-items-center">
+            <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
+                Xərc əlavə et</button>
+        </div>
+    </div>
+
+    <div class="row bg-primary text-white fw-bold py-2 rounded mt-2">
+        <div class="col-4">Xərcin adı</div>
+        <div class="col-3">Pul miqdarı</div>
+        <div class="col-3">Tarix</div>
+        <div class="col-2 text-center">Ayarlar</div>
+    </div>
+
+    <div id="expenseList"> </div>
+</div>
+
+<!-- elave etmek -->
+<div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="addExpenseModalLabel">Yeni xərc</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="addExpenseForm">
+                    <div class="row gy-2 overflow-hidden">
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Ad">
+                                <label for="name" class="form-label">Ad</label>
+                                <div class="error" id="nameError"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="sale" id="sale" placeholder="Ad">
+                                <label for="sale" class="form-label">Pul miqdarı</label>
+                                <div class="error" id="moneyError"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-grid my-3">
+                                <button class="btn btn-primary btn-lg" type="submit">Əlavə et</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--  -->

@@ -113,7 +113,7 @@ async function getWarehouse(req, res) {
 };
 
 async function createWarehouse(req, res) {
-    const { name, sale } = req.body;
+    const { name, sale, category } = req.body;
     const err = new Object();
 
     if (!name) {
@@ -130,11 +130,15 @@ async function createWarehouse(req, res) {
         err.sale = 'saleIsNotPositive';
     };
 
+    if (!category) {
+        err.category = 'categoryIsRequired';
+    };
+
     if (Object.keys(err).length > 0) {
         return res.status(400).json(err);
     };
 
-    await createWarehouseDB(name, Number(sale));
+    await createWarehouseDB(name, category, Number(sale));
     res.status(200).json({});
 };
 

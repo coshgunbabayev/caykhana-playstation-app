@@ -7,8 +7,10 @@
     <title>Admin</title>
     <link rel="stylesheet" href="/css/form.css">
     <%- include('../links/bootstrap') %>
-
-        <%- include('../links/' + activePage) %>
+    
+    <% if (activePage==='table' ) { %>
+        <link rel="stylesheet" href="/css/table.css">
+        <% } %>
 </head>
 
 <body>

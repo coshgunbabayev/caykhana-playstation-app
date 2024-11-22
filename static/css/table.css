@@ -9,6 +9,10 @@
     position: relative;
 }
 
+.active-custom-card {
+    background-color: #f2b2ca;
+}
+
 .card-btn {
     position: absolute;
     bottom: 10px;

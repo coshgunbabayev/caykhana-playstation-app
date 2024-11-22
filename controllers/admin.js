@@ -5,7 +5,7 @@ import {
     getTableDB,
     createTableDB,
     deleteTableDB,
-} from '../database/modules/admin/table.js'
+} from '../database/modules/admin/table.js';
 
 import {
     getAllWarehouseDB,
@@ -14,7 +14,7 @@ import {
     updateWarehouseDB,
     automaticUpdateQuantityAndPurchaseofWarehouseDB,
     deleteWarehouseDB
-} from '../database/modules/admin/warehouse.js'
+} from '../database/modules/admin/warehouse.js';
 
 import {
     getAllWithoutWarehouseDB,
@@ -22,7 +22,14 @@ import {
     createWithoutWarehouseDB,
     updateWithoutWarehouseDB,
     deleteWithoutWarehouseDB
-} from '../database/modules/admin/without-warehouse.js'
+} from '../database/modules/admin/without-warehouse.js';
+
+import {
+    getAllExpenseDB,
+    getExpenseDB,
+    createExpenseDB,
+    deleteExpenseDB
+} from '../database/modules/admin/expense.js'
 
 function login(req, res) {
     try {
@@ -290,6 +297,43 @@ async function deleteWithoutWarehouse(req, res) {
     res.status(200).json({});
 };
 
+async function getExpense(req, res) {
+    const expenses = await getAllExpenseDB();
+    res.status(200).json({
+        expenses
+    });
+};
+
+async function createExpense(req, res) {
+    const { name, money } = req.body;
+    const err = new Object();
+
+    if (!name) {
+        err.name = 'nameIsRequired';
+    };
+
+    if (!money) {
+        err.money = 'moneyIsRequired';
+    } else if (isNaN(Number(money))) {
+        err.money = 'moneyIsNotNumber';
+    } else if (Number(money) <= 0) {
+        err.money = 'moneyIsNotPositive';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
+    await createExpenseDB(name, Number(money));
+    res.status(200).json({});
+};
+
+async function deleteExpense(req, res) {
+    const { id } = req.params;
+    await deleteExpenseDB(id);
+    res.status(200).json({});
+};
+
 export {
     login,
     logout,
@@ -304,5 +348,8 @@ export {
     getWithoutWarehouse,
     createWithoutWarehouse,
     updateWithoutWarehouse,
-    deleteWithoutWarehouse
+    deleteWithoutWarehouse,
+    getExpense,
+    createExpense,
+    deleteExpense
 };

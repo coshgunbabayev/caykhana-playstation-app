@@ -15,7 +15,10 @@ import {
     getWithoutWarehouse,
     createWithoutWarehouse,
     updateWithoutWarehouse,
-    deleteWithoutWarehouse
+    deleteWithoutWarehouse,
+    getExpense,
+    createExpense,
+    deleteExpense
 } from '../controllers/admin.js';
 
 import {
@@ -53,5 +56,12 @@ router.route('/without-warehouse')
 router.route('/without-warehouse/:id')
     .put(authenticateForApi, updateWithoutWarehouse)
     .delete(authenticateForApi, deleteWithoutWarehouse);
+
+router.route('/expense')
+    .get(authenticateForApi, getExpense)
+    .post(authenticateForApi, createExpense);
+
+router.route('/expense/:id')
+    .delete(authenticateForApi, deleteExpense);
 
 export default router;

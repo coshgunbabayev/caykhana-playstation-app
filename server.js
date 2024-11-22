@@ -23,9 +23,11 @@ app.listen(port, () => {
 });
 
 import pageRouter from './routers/page.js';
+import commonRouter from './routers/common.js';
 import adminRouter from './routers/admin.js';
 import workerRouter from './routers/worker.js';
 
 app.use('/', pageRouter);
+app.use('/api', commonRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/worker', workerRouter);

@@ -224,7 +224,7 @@ async function getWithoutWarehouse(req, res) {
 };
 
 async function createWithoutWarehouse(req, res) {
-    const { name, sale } = req.body;
+    const { name, sale, category } = req.body;
     const err = new Object();
 
     if (!name) {
@@ -241,11 +241,15 @@ async function createWithoutWarehouse(req, res) {
         err.sale = 'saleIsNotPositive';
     };
 
+    if (!category) {
+        err.category = 'categoryIsRequired';
+    };
+
     if (Object.keys(err).length > 0) {
         return res.status(400).json(err);
     };
 
-    await createWithoutWarehouseDB(name, Number(sale));
+    await createWithoutWarehouseDB(name, category, Number(sale));
     res.status(200).json({});
 };
 

@@ -1,8 +1,13 @@
 <div class="container mt-4">
     <div class="row bg-light py-2 rounded border">
-        <div class="col-10">
+        <div class="col-8">
             <input type="text" id="searchInput" class="form-control" placeholder="Məhsul axtar"
                 oninput="searchProduct()">
+        </div>
+        <div class="col-2">
+            <select id="categoryOption" onchange="selectCategory()" class="form-select btn btn-primary w-100">
+                <option value="" selected>Kategoriya</option>
+            </select>
         </div>
         <div class="col-2 d-flex align-items-center">
             <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addProductModal">
@@ -10,9 +15,12 @@
         </div>
     </div>
 
+
+
     <div class="row bg-primary text-white fw-bold py-2 rounded mt-2">
-        <div class="col-6">Məhsulun adı</div>
-        <div class="col-3">Satış qiyməti</div>
+        <div class="col-4">Məhsulun adı</div>
+        <div class="col-3">Kategoriya</div>
+        <div class="col-2">Satış qiyməti</div>
         <div class="col-3 text-center">Ayarlar</div>
     </div>
 
@@ -50,6 +58,13 @@
                             </div>
                         </div>
 
+                        <div class="col-12 mb-3">
+                            <div class="btn-group d-flex flex-wrap gap-2" id="categoryInputs" role="group"
+                                aria-label="role"> </div>
+                            <div class="error" id="categoryError"></div>
+                        </div>
+
+
                         <div class="col-12">
                             <div class="d-grid my-3">
                                 <button class="btn btn-primary btn-lg" type="submit">Əlavə et</button>
@@ -85,8 +100,7 @@
                         </div>
                         <div class="col-12">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="sale" id="editSale"
-                                    placeholder="Qiymət">
+                                <input type="text" class="form-control" name="sale" id="editSale" placeholder="Qiymət">
                                 <label for="editSale" class="form-label">Qiymət</label>
                                 <div class="error" id="editSaleError"></div>
                             </div>

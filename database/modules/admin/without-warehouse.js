@@ -22,12 +22,13 @@ async function getWithoutWarehouseDB(param, value) {
     });
 };
 
-async function createWithoutWarehouseDB(name, sale) {
+async function createWithoutWarehouseDB(name, category, sale) {
     sale = Number(sale.toFixed(2));
-    sqlcommand = `INSERT INTO withoutWarehouse (name, sale) VALUES ('${name}', ${sale})`;
+    sqlcommand = `INSERT INTO withoutWarehouse (name, category, sale) VALUES ('${name}', '${category}', ${sale})`;
     await db.run(sqlcommand, (err) => {
         if (err) {
-            throw new Error('')
+            console.log(err);
+            
         };
     });
 };

@@ -1,28 +1,47 @@
 const productListDiv = document.getElementById('productList');
 const addProductForm = document.getElementById('addProductForm');
 const editProductForm = document.getElementById('editProductForm');
+const categoryOption = document.getElementById('categoryOption');
+const categoryInputs = document.getElementById('categoryInputs');
 const nameInput = document.getElementById('name');
 const nameError = document.getElementById('nameError');
 const saleInput = document.getElementById('sale');
 const saleError = document.getElementById('saleError');
+const categoryError = document.getElementById('categoryError');
 const editNameInput = document.getElementById('editName');
 const editNameError = document.getElementById('editNameError');
 const editSaleInput = document.getElementById('editSale');
 const editSaleError = document.getElementById('editSaleError');
 
-
 function displayProducts(productList) {
     productListDiv.innerHTML = '';
     productList.forEach(product => {
         productListDiv.innerHTML += `
-          <div class="row bg-light py-2 rounded border mt-2">
-            <div class="col-6">${product.name}</div>
-            <div class="col-3">${product.sale}</div>
-            <div class="col-3 text-center">
-                <button class="btn btn-warning btn-sm mx-1" onclick="editProduct(${product.id})">Redaktə et</button>
-                <button class="btn btn-danger btn-sm mx-1" onclick="deleteProduct(${product.id})">Sil</button>
+            <div class="row bg-light py-2 rounded border mt-2">
+                <div class="col-4">${product.name}</div>
+                <div class="col-3">${product.category}</div>
+                <div class="col-2">${product.sale} azn</div>
+                <div class="col-3 text-center">
+                    <button class="btn btn-warning btn-sm mx-1" onclick="editProduct(${product.id})">Redaktə et</button>
+                    <button class="btn btn-danger btn-sm mx-1" onclick="deleteProduct(${product.id})">Sil</button>
+                </div>
             </div>
-          </div>
+        `;
+    });
+};
+
+function placementCategories(categoryList) {
+    categoryInputs.innerHTML = '';
+    categoryList.forEach(category => {
+        categoryInputs.innerHTML += `
+            <input type="radio" class="btn-check" id="category${category.id}" name="category" value="${category.en}">
+            <label for="category${category.id}" class="btn btn-outline-primary rounded-pill flex-fill">${category.az}</label>
+        `;
+    });
+
+    categoryList.forEach(category => {
+        categoryOption.innerHTML += `
+            <option value="${category.en}">${category.az}</option>
         `;
     });
 };
@@ -43,10 +62,29 @@ async function getProducts() {
     };
 };
 
+async function getCategories() {
+    let res = await fetch('/api/category', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        res = await res.json();
+        return res.categories;
+    } else {
+        return [];
+    };
+};
+
 let products = [];
+let categories = [];
 document.addEventListener("DOMContentLoaded", async function () {
     products = await getProducts();
+    categories = await getCategories();
     displayProducts(products);
+    placementCategories(categories);
 });
 
 function searchProduct() {
@@ -55,6 +93,18 @@ function searchProduct() {
         product.name.toLowerCase().includes(searchQuery)
     );
     displayProducts(filteredProducts);
+};
+
+function selectCategory() {
+    const category = categoryOption.value;
+    if (!category) {
+        displayProducts(products);
+    } else {
+        const filteredProducts = products.filter(product =>
+            product.category === category
+        );
+        displayProducts(filteredProducts);
+    };
 };
 
 addProductForm.addEventListener('submit', async (e) => {
@@ -66,6 +116,7 @@ addProductForm.addEventListener('submit', async (e) => {
     saleInput.style.borderColor = '#ced4da';
     nameError.innerText = '';
     saleError.innerText = '';
+    categoryError.innerText = '';
 
     let res = await fetch('/api/admin/without-warehouse', {
         method: 'POST',
@@ -74,7 +125,8 @@ addProductForm.addEventListener('submit', async (e) => {
         },
         body: JSON.stringify({
             name: formData.get('name'),
-            sale: formData.get('sale')
+            sale: formData.get('sale'),
+            category: formData.get('category')
         })
     });
 
@@ -110,6 +162,14 @@ addProductForm.addEventListener('submit', async (e) => {
 
                 case 'saleIsNotPositive':
                     saleError.innerText = 'Satış qiyməti müsbət olmalıdır';
+                    break;
+            };
+        };
+
+        if (res.category) {
+            switch (res.category) {
+                case 'categoryIsRequired':
+                    categoryError.innerText = 'Kategoriya seçmək məcburidir';
                     break;
             };
         };

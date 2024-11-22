@@ -1,4 +1,4 @@
-import db from '../../database/main.js';
+import db from '../../main.js';
 
 let sqlcommand;
 
@@ -23,6 +23,7 @@ async function getWithoutWarehouseDB(param, value) {
 };
 
 async function createWithoutWarehouseDB(name, sale) {
+    sale = Number(sale.toFixed(2));
     sqlcommand = `INSERT INTO withoutWarehouse (name, sale) VALUES ('${name}', ${sale})`;
     await db.run(sqlcommand, (err) => {
         if (err) {
@@ -32,6 +33,7 @@ async function createWithoutWarehouseDB(name, sale) {
 };
 
 async function updateWithoutWarehouseDB(id, name, sale) {
+    sale = Number(sale.toFixed(2));
     sqlcommand = `UPDATE withoutWarehouse SET name = '${name}', sale = ${sale} WHERE id = ${id}`;
     await db.run(sqlcommand, [], (err) => {
         if (err) return console.error(err.message);

@@ -2,6 +2,7 @@ const tablesDiv = document.getElementById('tablesDiv');
 const addTabelForm = document.getElementById('addTabelForm');
 const nameInput = document.getElementById('name');
 const nameError = document.getElementById('nameError');
+const roleError = document.getElementById('roleError');
 
 async function getTables() {
     let res = await fetch('/api/admin/table', {
@@ -15,6 +16,14 @@ async function getTables() {
         res = await res.json();
         const tables = res.tables;
 
+        function role(role) {
+            if (role === 'playstation') {
+                return 'Playstation';
+            } else if (role === 'food') {
+                return 'Yemək';
+            };
+        };
+
         for (const table of tables) {
             tablesDiv.innerHTML += `
                 <div class="col-auto">
@@ -22,7 +31,7 @@ async function getTables() {
                         <button class="btn btn-danger card-btn" onclick="deleteTable('${table.id}')">Sil</button>
                         <div class="card-body">
                             <h5 class="card-title fw-bold text-primary">${table.name}</h5>
-                            <p class="card-title fw-bold text-primary">${table.role}</p>
+                            <h6 class="card-title fw-bold text-primary">${role(table.role)}</h6>
                         </div>
                     </div>
                 </div>
@@ -42,6 +51,10 @@ addTabelForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(addTabelForm);
 
+    nameInput.style.borderColor = '#ced4da';
+    nameError.innerText = '';
+    roleError.innerText = '';
+
     try {
         let res = await fetch('/api/admin/table', {
             method: 'POST',
@@ -49,7 +62,8 @@ addTabelForm.addEventListener('submit', async (e) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: formData.get('name')
+                name: formData.get('name'),
+                role: formData.get('role')
             })
         });
 
@@ -68,6 +82,14 @@ addTabelForm.addEventListener('submit', async (e) => {
                     case 'nameIsUsed':
                         nameInput.style.borderColor = 'rgb(255, 0, 0)';
                         nameError.innerText = 'Ad istifadə olunub';
+                        break;
+                };
+            };
+
+            if (res.role) {
+                switch (res.role) {
+                    case 'roleIsRequired':
+                        roleError.innerText = 'Rol seçmək məcburidir';
                         break;
                 };
             };

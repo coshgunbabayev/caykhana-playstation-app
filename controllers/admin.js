@@ -5,7 +5,7 @@ import {
     getTableDB,
     createTableDB,
     deleteTableDB,
-} from '../database/modules/table.js'
+} from '../database/modules/admin/table.js'
 
 import {
     getAllWarehouseDB,
@@ -14,7 +14,7 @@ import {
     updateWarehouseDB,
     automaticUpdateQuantityAndPurchaseofWarehouseDB,
     deleteWarehouseDB
-} from '../database/modules/warehouse.js'
+} from '../database/modules/admin/warehouse.js'
 
 import {
     getAllWithoutWarehouseDB,
@@ -22,7 +22,7 @@ import {
     createWithoutWarehouseDB,
     updateWithoutWarehouseDB,
     deleteWithoutWarehouseDB
-} from '../database/modules/without-warehouse.js'
+} from '../database/modules/admin/without-warehouse.js'
 
 function login(req, res) {
     try {
@@ -74,12 +74,15 @@ async function getTable(req, res) {
 };
 
 async function createTable(req, res) {
-    const { name } = req.body;
+    const { name, role } = req.body;
+    const err = new Object();
 
     if (!name) {
-        return res.status(400).json({
-            name: 'nameIsRequired'
-        });
+        err.name = 'nameIsRequired';
+    };
+
+    if (!role) {
+        err.role = 'roleIsRequired';
     };
 
     if (await getTableDB('name', name)) {
@@ -88,7 +91,11 @@ async function createTable(req, res) {
         });
     };
 
-    await createTableDB(name, 0);
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
+    await createTableDB(name, role);
     res.status(200).json({});
 };
 
@@ -204,7 +211,7 @@ async function deleteWarehouse(req, res) {
     if ((await getWarehouseDB('id', id)).quantity) {
         return res.status(400).json({});
     };
-    
+
     await deleteWarehouseDB(id);
     res.status(200).json({});
 };

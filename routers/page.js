@@ -5,9 +5,10 @@ import {
     getIndex,
     getAdminLogin,
     getAdmin,
-    getTables,
+    getTable,
     getWarehouse,
-    getWithoutWarehouse
+    getWithoutWarehouse,
+    getExpense
 } from '../controllers/page.js';
 
 import {
@@ -23,13 +24,16 @@ router.route('/login')
 router.route('/admin')
     .get(authenticateForPage, getAdmin);
 
-router.route('/admin/tables')
-    .get(authenticateForPage, getTables);
+router.route('/admin/table')
+    .get(authenticateForPage, getTable);
 
 router.route('/admin/warehouse')
     .get(authenticateForPage, getWarehouse);
 
 router.route('/admin/without-warehouse')
     .get(authenticateForPage, getWithoutWarehouse);
+
+router.route('/admin/expense')
+    .get(authenticateForPage, getExpense);
 
 export default router;

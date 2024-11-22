@@ -12,7 +12,7 @@ function getAdmin(req, res) {
     });
 };
 
-function getTables(req, res) {
+function getTable(req, res) {
     res.status(200).render('partials/admin/index', {
         activePage: 'table'
     });
@@ -30,11 +30,18 @@ function getWithoutWarehouse(req, res) {
     });
 };
 
+function getExpense(req, res) {
+    res.status(200).render('partials/admin/index', {
+        activePage: 'expense'
+    });
+};
+
 export {
     getIndex,
     getAdminLogin,
     getAdmin,
-    getTables,
+    getTable,
     getWarehouse,
-    getWithoutWarehouse
+    getWithoutWarehouse,
+    getExpense
 };

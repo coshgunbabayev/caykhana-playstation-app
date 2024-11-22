@@ -1,4 +1,4 @@
-import db from '../../database/main.js';
+import db from '../../main.js';
 
 let sqlcommand;
 
@@ -23,7 +23,7 @@ async function getTableDB(param, value) {
 };
 
 async function createTableDB(name, role) {
-    sqlcommand = `INSERT INTO tables (name, role) VALUES ('${name}', ${role})`;
+    sqlcommand = `INSERT INTO tables (name, role) VALUES ('${name}', '${role}')`;
     await db.run(sqlcommand, (err) => {
         if (err) {
             throw new Error('')

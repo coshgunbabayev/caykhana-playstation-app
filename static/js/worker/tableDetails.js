@@ -27,7 +27,7 @@ async function openDetails(id) {
         detailsFormContent.innerHTML += `
                 <div class="col-12">
                     <div class="d-grid">
-                        <button class="btn btn-primary btn-lg" type="submit">Vaxt qur</button>
+                        <button class="btn btn-primary btn-lg" type="text">Vaxt qur</button>
                     </div>
                 </div>
             `;
@@ -36,7 +36,7 @@ async function openDetails(id) {
     detailsFormContent.innerHTML += `
             <div class="col-12">
                 <div class="d-grid">
-                    <button class="btn btn-primary btn-lg" type="submit">Sifariş əlavə et</button>
+                    <button class="btn btn-primary btn-lg" type="text" onclick="openAddOrder(${id});">Sifariş əlavə et</button>
                 </div>
             </div>
         `;
@@ -45,7 +45,7 @@ async function openDetails(id) {
         detailsFormContent.innerHTML += `
                 <div class="col-12">
                     <div class="d-grid">
-                        <button class="btn btn-primary btn-lg" type="submit">Masanı bağla</button>
+                        <button class="btn btn-primary btn-lg" type="text">Masanı bağla</button>
                     </div>
                 </div>
             `;

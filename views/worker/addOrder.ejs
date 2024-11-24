@@ -10,7 +10,51 @@
             <div class="modal-body">
 
                 <form id="addOrderForm">
-                    <div id="addOrderFormContent" class="row gy-2 overflow-hidden">
+                    <div class="row gy-2 overflow-hidden">
+
+                        <div class="col-12 mb-3">
+                            <div class="btn-group d-flex flex-wrap gap-2" id="categoryInputs" role="group"
+                                aria-label="role">
+
+                                <input type="radio" class="btn-check" id="categoryPopular" name="category"
+                                    value="popular">
+                                <label for="categoryPopular"
+                                    class="btn btn-outline-primary rounded-pill flex-fill">Populyar</label>
+
+
+
+                            </div>
+                            <div class="error" id="categoryError"></div>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <div class="btn-group d-flex" id="quantity" role="group" aria-label="quantity">
+                                <input type="radio" class="btn-check" id="quantity1" name="quantity" value="1">
+                                <label for="quantity1" class="btn btn-outline-primary flex-fill">1</label>
+
+                                <input type="radio" class="btn-check" id="quantity2" name="quantity" value="2">
+                                <label for="quantity2" class="btn btn-outline-primary flex-fill">2</label>
+
+                                <input type="radio" class="btn-check" id="quantity3" name="quantity" value="3">
+                                <label for="quantity3" class="btn btn-outline-primary flex-fill">3</label>
+
+                                <input type="radio" class="btn-check" id="quantity4" name="quantity" value="4">
+                                <label for="quantity4" class="btn btn-outline-primary flex-fill">4</label>
+
+                                <input type="radio" class="btn-check" id="quantity5" name="quantity" value="5">
+                                <label for="quantity5" class="btn btn-outline-primary flex-fill">5</label>
+
+                                <input type="radio" class="btn-check" id="quantity10" name="quantity" value="10">
+                                <label for="quantity10" class="btn btn-outline-primary flex-fill">10</label>
+                            </div>
+                            <div class="error" id="quantityError"></div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-grid my-3">
+                                <button class="btn btn-primary btn-lg" type="submit">Əlavə et</button>
+                            </div>
+                        </div>
 
                     </div>
                 </form>

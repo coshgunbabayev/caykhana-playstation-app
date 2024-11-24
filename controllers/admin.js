@@ -8,21 +8,13 @@ import {
 } from '../database/modules/admin/table.js';
 
 import {
-    getAllWarehouseDB,
-    getWarehouseDB,
-    createWarehouseDB,
-    updateWarehouseDB,
-    automaticUpdateQuantityAndPurchaseofWarehouseDB,
-    deleteWarehouseDB
-} from '../database/modules/admin/warehouse.js';
-
-import {
-    getAllWithoutWarehouseDB,
-    getWithoutWarehouseDB,
-    createWithoutWarehouseDB,
-    updateWithoutWarehouseDB,
-    deleteWithoutWarehouseDB
-} from '../database/modules/admin/without-warehouse.js';
+    getAllProductsOneTypeDB,
+    getProductDB,
+    createProductDB,
+    updateProductDB,
+    // automaticUpdateQuantityAndPurchaseofWarehouseDB,
+    setDisabledProductDB
+} from '../database/modules/admin/products.js';
 
 import {
     getAllExpenseDB,
@@ -113,7 +105,7 @@ async function deleteTable(req, res) {
 };
 
 async function getWarehouse(req, res) {
-    const products = await getAllWarehouseDB();
+    const products = await getAllProductsOneTypeDB('warehouse');
     res.status(200).json({
         products
     });
@@ -145,7 +137,7 @@ async function createWarehouse(req, res) {
         return res.status(400).json(err);
     };
 
-    await createWarehouseDB(name, category, Number(sale));
+    await createProductDB('warehouse', name, category, Number(sale));
     res.status(200).json({});
 };
 
@@ -184,7 +176,7 @@ async function increaseWarehouse(req, res) {
     const newQuantity = product.quantity + Number(quantity);
     const newPurchase = newTotalPurchase / newQuantity;
 
-    await automaticUpdateQuantityAndPurchaseofWarehouseDB(Number(id), newQuantity, newPurchase);
+    // await automaticUpdateQuantityAndPurchaseofWarehouseDB(Number(id), newQuantity, newPurchase);
 
     res.status(200).json({});
 };
@@ -212,7 +204,7 @@ async function updateWarehouse(req, res) {
         return res.status(400).json(err);
     };
 
-    await updateWarehouseDB(Number(id), name, Number(sale));
+    await updateProductDB(Number(id), name, Number(sale));
     res.status(200).json({});
 };
 
@@ -223,12 +215,12 @@ async function deleteWarehouse(req, res) {
         return res.status(400).json({});
     };
 
-    await deleteWarehouseDB(id);
+    await setDisabledProductDB(Number(id));
     res.status(200).json({});
 };
 
 async function getWithoutWarehouse(req, res) {
-    const products = await getAllWithoutWarehouseDB();
+    const products = await getAllProductsOneTypeDB('withoutWarehouse');
     res.status(200).json({
         products
     });
@@ -260,7 +252,7 @@ async function createWithoutWarehouse(req, res) {
         return res.status(400).json(err);
     };
 
-    await createWithoutWarehouseDB(name, category, Number(sale));
+    await createProductDB('withoutWarehouse', name, category, Number(sale));
     res.status(200).json({});
 };
 
@@ -287,13 +279,13 @@ async function updateWithoutWarehouse(req, res) {
         return res.status(400).json(err);
     };
 
-    await updateWithoutWarehouseDB(Number(id), name, Number(sale));
+    await updateProductDB(Number(id), name, Number(sale));
     res.status(200).json({});
 };
 
 async function deleteWithoutWarehouse(req, res) {
     const { id } = req.params;
-    await deleteWithoutWarehouseDB(id);
+    await setDisabledProductDB(id);
     res.status(200).json({});
 };
 

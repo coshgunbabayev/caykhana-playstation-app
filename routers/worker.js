@@ -16,4 +16,7 @@ router.route('/table/:id')
 router.route('/table/:id/is-active')
     .get(getTableIsActive);
 
+// router.route('/product')
+//     .get(getProduct);
+
 export default router;

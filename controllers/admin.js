@@ -10,11 +10,10 @@ import {
 import {
     getAllProductsOneTypeDB,
     getProductDB,
-    createProductDB,
-    updateProductDB,
-    // automaticUpdateQuantityAndPurchaseofWarehouseDB,
-    setDisabledProductDB
-} from '../database/modules/admin/products.js';
+    createAloneProductDB,
+    createSetProductDB,
+    updateProductDB
+} from '../database/modules/products.js';
 
 import {
     getAllExpenseDB,
@@ -65,59 +64,13 @@ function logout(req, res) {
     };
 };
 
-async function getTable(req, res) {
-    const tables = await getAllTableDB();
-    res.status(200).json({
-        tables
-    });
-};
-
-async function createTable(req, res) {
-    const { name, role } = req.body;
+async function createProduct(req, res) {
+    const { name, sale, category, type } = req.body;
     const err = new Object();
 
     if (!name) {
         err.name = 'nameIsRequired';
-    };
-
-    if (!role) {
-        err.role = 'roleIsRequired';
-    };
-
-    if (await getTableDB('name', name)) {
-        return res.status(400).json({
-            name: 'nameIsUsed'
-        });
-    };
-
-    if (Object.keys(err).length > 0) {
-        return res.status(400).json(err);
-    };
-
-    await createTableDB(name, role);
-    res.status(200).json({});
-};
-
-async function deleteTable(req, res) {
-    const { id } = req.params;
-    await deleteTableDB(id);
-    res.status(200).json({});
-};
-
-async function getWarehouse(req, res) {
-    const products = await getAllProductsOneTypeDB('warehouse');
-    res.status(200).json({
-        products
-    });
-};
-
-async function createWarehouse(req, res) {
-    const { name, sale, category } = req.body;
-    const err = new Object();
-
-    if (!name) {
-        err.name = 'nameIsRequired';
-    } else if (await getWarehouseDB('name', name) || await getWithoutWarehouseDB('name', name)) {
+    } else if (await getProductDB('name', name)) {
         err.name = 'nameIsUsed';
     };
 
@@ -137,11 +90,70 @@ async function createWarehouse(req, res) {
         return res.status(400).json(err);
     };
 
-    await createProductDB('warehouse', name, category, Number(sale));
+    await createAloneProductDB(type, name, category, Number(sale));
     res.status(200).json({});
 };
 
-async function increaseWarehouse(req, res) {
+async function getProduct(req, res) {
+    const products = await getAllProductsOneTypeDB(req.params.type);
+    res.status(200).json({
+        products
+    });
+};
+
+async function updateProduct(req, res) {
+    const { id } = req.params;
+    const { name, sale } = req.body;
+    const err = new Object();
+
+    if (!name) {
+        err.name = 'nameIsRequired';
+    } else {
+        const product = await getProductDB('name', name);
+        if (product && product.id != id) {
+            err.name = 'nameIsUsed';
+        };
+    };
+
+    if (!sale) {
+        err.sale = 'saleIsRequired';
+    } else if (isNaN(Number(sale))) {
+        err.sale = 'saleIsNotNumber';
+    } else if (Number(sale) <= 0) {
+        err.sale = 'saleIsNotPositive';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
+    await updateProductDB(
+        Number(id),
+        ['name', 'sale'],
+        [name, Number(Number(sale).toFixed(2))]
+    );
+
+    res.status(200).json({});
+};
+
+async function deleteProduct(req, res) {
+    const { id } = req.params;
+
+    const product = await getProductDB('id', id);
+
+    if (product.type === 'warehouse' && product.quantity > 0) {
+        return res.status(400).json({});
+    };
+
+    await updateProductDB(
+        Number(id),
+        ['active'],
+        ['false']
+    );
+    res.status(200).json({});
+};
+
+async function increaseProduct(req, res) {
     const { id } = req.params;
     const { quantity, purchase } = req.body;
     const err = new Object();
@@ -168,7 +180,11 @@ async function increaseWarehouse(req, res) {
         return res.status(400).json(err);
     };
 
-    const product = await getWarehouseDB('id', Number(id));
+    const product = await getProductDB('id', Number(id));
+
+    if (product.type !== 'warehouse') {
+        return res.status(400).json({});
+    };
 
     const originalTotalPurchase = product.quantity * product.purchase;
     const addTotalPurchase = Number(quantity) * Number(purchase);
@@ -176,116 +192,12 @@ async function increaseWarehouse(req, res) {
     const newQuantity = product.quantity + Number(quantity);
     const newPurchase = newTotalPurchase / newQuantity;
 
-    // await automaticUpdateQuantityAndPurchaseofWarehouseDB(Number(id), newQuantity, newPurchase);
+    await updateProductDB(
+        Number(id),
+        ['quantity', 'purchase'],
+        [newQuantity, Number(Number(newPurchase).toFixed(2))]
+    );
 
-    res.status(200).json({});
-};
-
-async function updateWarehouse(req, res) {
-    const { id } = req.params;
-    const { name, sale } = req.body;
-    const err = new Object();
-
-    if (!name) {
-        err.name = 'nameIsRequired';
-    } else if ((await getWarehouseDB('name', name) && (await getWarehouseDB('name', name)).id != id) || await getWithoutWarehouseDB('name', name)) {
-        err.name = 'nameIsUsed';
-    };
-
-    if (!sale) {
-        err.sale = 'saleIsRequired';
-    } else if (isNaN(Number(sale))) {
-        err.sale = 'saleIsNotNumber';
-    } else if (Number(sale) <= 0) {
-        err.sale = 'saleIsNotPositive';
-    };
-
-    if (Object.keys(err).length > 0) {
-        return res.status(400).json(err);
-    };
-
-    await updateProductDB(Number(id), name, Number(sale));
-    res.status(200).json({});
-};
-
-async function deleteWarehouse(req, res) {
-    const { id } = req.params;
-
-    if ((await getWarehouseDB('id', id)).quantity) {
-        return res.status(400).json({});
-    };
-
-    await setDisabledProductDB(Number(id));
-    res.status(200).json({});
-};
-
-async function getWithoutWarehouse(req, res) {
-    const products = await getAllProductsOneTypeDB('withoutWarehouse');
-    res.status(200).json({
-        products
-    });
-};
-
-async function createWithoutWarehouse(req, res) {
-    const { name, sale, category } = req.body;
-    const err = new Object();
-
-    if (!name) {
-        err.name = 'nameIsRequired';
-    } else if (await getWithoutWarehouseDB('name', name) || await getWarehouseDB('name', name)) {
-        err.name = 'nameIsUsed';
-    };
-
-    if (!sale) {
-        err.sale = 'saleIsRequired';
-    } else if (isNaN(Number(sale))) {
-        err.sale = 'saleIsNotNumber';
-    } else if (Number(sale) <= 0) {
-        err.sale = 'saleIsNotPositive';
-    };
-
-    if (!category) {
-        err.category = 'categoryIsRequired';
-    };
-
-    if (Object.keys(err).length > 0) {
-        return res.status(400).json(err);
-    };
-
-    await createProductDB('withoutWarehouse', name, category, Number(sale));
-    res.status(200).json({});
-};
-
-async function updateWithoutWarehouse(req, res) {
-    const { id } = req.params;
-    const { name, sale } = req.body;
-    const err = new Object();
-
-    if (!name) {
-        err.name = 'nameIsRequired';
-    } else if ((await getWithoutWarehouseDB('name', name) && (await getWithoutWarehouseDB('name', name)).id != id) || await getWarehouseDB('name', name)) {
-        err.name = 'nameIsUsed';
-    };
-
-    if (!sale) {
-        err.sale = 'saleIsRequired';
-    } else if (isNaN(Number(sale))) {
-        err.sale = 'saleIsNotNumber';
-    } else if (Number(sale) <= 0) {
-        err.sale = 'saleIsNotPositive';
-    };
-
-    if (Object.keys(err).length > 0) {
-        return res.status(400).json(err);
-    };
-
-    await updateProductDB(Number(id), name, Number(sale));
-    res.status(200).json({});
-};
-
-async function deleteWithoutWarehouse(req, res) {
-    const { id } = req.params;
-    await setDisabledProductDB(id);
     res.status(200).json({});
 };
 
@@ -329,18 +241,11 @@ async function deleteExpense(req, res) {
 export {
     login,
     logout,
-    getTable,
-    createTable,
-    deleteTable,
-    getWarehouse,
-    createWarehouse,
-    increaseWarehouse,
-    updateWarehouse,
-    deleteWarehouse,
-    getWithoutWarehouse,
-    createWithoutWarehouse,
-    updateWithoutWarehouse,
-    deleteWithoutWarehouse,
+    createProduct,
+    getProduct,
+    updateProduct,
+    deleteProduct,
+    increaseProduct,
     getExpense,
     createExpense,
     deleteExpense

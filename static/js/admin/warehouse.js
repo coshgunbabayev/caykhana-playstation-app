@@ -56,7 +56,7 @@ function placementCategories(categoryList) {
 };
 
 async function getProducts() {
-    let res = await fetch('/api/admin/warehouse', {
+    let res = await fetch('/api/admin/product/warehouse', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ addProductForm.addEventListener('submit', async (e) => {
     saleError.innerText = '';
     categoryError.innerText = '';
 
-    let res = await fetch('/api/admin/warehouse', {
+    let res = await fetch('/api/admin/product', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -137,7 +137,8 @@ addProductForm.addEventListener('submit', async (e) => {
         body: JSON.stringify({
             name: formData.get('name'),
             sale: formData.get('sale'),
-            category: formData.get('category')
+            category: formData.get('category'),
+            type: 'warehouse'
         })
     });
 
@@ -243,7 +244,7 @@ editProductForm.addEventListener('submit', async (e) => {
     editNameError.innerText = '';
     editSaleError.innerText = '';
 
-    let res = await fetch(`/api/admin/warehouse/${productId}`, {
+    let res = await fetch(`/api/admin/product/${productId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -296,7 +297,7 @@ async function deleteProduct(id) {
         return;
     };
 
-    let res = await fetch(`/api/admin/warehouse/${id}`, {
+    let res = await fetch(`/api/admin/product/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

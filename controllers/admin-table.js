@@ -3,7 +3,7 @@ import {
     getTableDB,
     createTableDB,
     deleteTableDB,
-} from '../database/modules/admin/table.js';
+} from '../database/modules/table.js';
 
 async function getTable(req, res) {
     const tables = await getAllTableDB();

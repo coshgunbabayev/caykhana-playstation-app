@@ -1,12 +1,12 @@
 import {
     getAllTableDB,
     getTableDB,
-} from '../database/modules/worker/table.js';
+} from '../database/modules/table.js';
 
 import {
     getAllOrderDB,
-    getOrderDB,
-    getMoreThanOneOrderDB
+    getOneOrderDB,
+    getOrderDB
 } from '../database/modules/worker/order.js';
 
 import {
@@ -21,7 +21,7 @@ async function getTable(req, res) {
     });
 };
 
-async function getTableById(req, res) {
+async function getOneTable(req, res) {
     const { id } = req.params
     const table = await getTableDB('id', Number(id));
     res.status(200).json({
@@ -42,6 +42,6 @@ async function getTableIsActive(req, res) {
 
 export {
     getTable,
-    getTableById,
+    getOneTable,
     getTableIsActive,
 };

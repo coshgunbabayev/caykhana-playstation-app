@@ -3,17 +3,17 @@ const router = new Router();
 
 import {
     getTable,
-    getTableById,
+    getOneTable,
     getTableIsActive,
-} from '../controllers/worker.js';
+} from '../controllers/worker-table.js';
 
-router.route('/table')
+router.route('/')
     .get(getTable);
 
-router.route('/table/:id')
-    .get(getTableById)
+router.route('/:id')
+    .get(getOneTable)
 
-router.route('/table/:id/is-active')
+router.route('/:id/is-active')
     .get(getTableIsActive);
 
 // router.route('/product')

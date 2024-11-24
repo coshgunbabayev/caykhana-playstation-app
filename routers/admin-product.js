@@ -2,6 +2,7 @@ import { Router } from 'express';
 const router = new Router();
 
 import {
+    createProduct,
     getProduct,
     updateProduct,
     deleteProduct,
@@ -11,6 +12,9 @@ import {
 import {
     authenticateForApi
 } from '../middlewares/adminAuth.js'
+
+router.route('/')
+    .post(authenticateForApi, createProduct)
 
 router.route('/:type')
     .get(authenticateForApi, getProduct);

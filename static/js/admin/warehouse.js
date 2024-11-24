@@ -202,7 +202,7 @@ increaseProductForm.addEventListener('submit', async (e) => {
     const formData = new FormData(increaseProductForm);
     const productId = increaseProductForm.dataset.productId;
 
-    let res = await fetch(`/api/admin/warehouse/increase/${productId}`, {
+    let res = await fetch(`/api/admin/product/increase/${productId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

@@ -43,13 +43,6 @@ async function deleteExpense(req, res) {
 };
 
 export {
-    login,
-    logout,
-    createProduct,
-    getProduct,
-    updateProduct,
-    deleteProduct,
-    increaseProduct,
     getExpense,
     createExpense,
     deleteExpense

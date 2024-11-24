@@ -11,11 +11,11 @@ import {
     authenticateForApi
 } from '../middlewares/adminAuth.js'
 
-router.route('/expense')
+router.route('/')
     .get(authenticateForApi, getExpense)
     .post(authenticateForApi, createExpense);
 
-router.route('/expense/:id')
+router.route('/:id')
     .delete(authenticateForApi, deleteExpense);
 
 export default router;

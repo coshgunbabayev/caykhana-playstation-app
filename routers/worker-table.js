@@ -3,8 +3,7 @@ const router = new Router();
 
 import {
     getTable,
-    getOneTable,
-    getTableIsActive,
+    getOneTable
 } from '../controllers/worker-table.js';
 
 router.route('/')
@@ -12,11 +11,5 @@ router.route('/')
 
 router.route('/:id')
     .get(getOneTable)
-
-router.route('/:id/is-active')
-    .get(getTableIsActive);
-
-// router.route('/product')
-//     .get(getProduct);
 
 export default router;

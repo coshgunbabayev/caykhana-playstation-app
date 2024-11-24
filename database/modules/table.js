@@ -32,7 +32,7 @@ async function createTableDB(name, role) {
 };
 
 async function deleteTableDB(id) {
-    sqlcommand = "DELETE FROM tables WHERE(id)=(?)";
+    sqlcommand = 'UPDATE tables SET active = "false" WHERE(id)=(?)';
     await db.run(sqlcommand, [id], (err) => {
         if (err) return console.error(err.message);
     });

@@ -19,8 +19,23 @@ function closeModal(modalInstance) {
     modalInstance.hide();
 };
 
+async function getTables() {
+    let res = await fetch('/api/worker/table', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        res = await res.json();
+        return res.tables;
+    };
+    return [];
+}
+
 async function getProducts() {
-    let res = await fetch('/api/woker/product', {
+    let res = await fetch('/api/worker/product', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -30,9 +45,8 @@ async function getProducts() {
     if (res.ok) {
         res = await res.json();
         return res.products;
-    } else {
-        return [];
     };
+    return [];
 };
 
 async function getCategories() {
@@ -46,8 +60,35 @@ async function getCategories() {
     if (res.ok) {
         res = await res.json();
         return res.categories;
-    } else {
-        return [];
+    };
+    return [];
+};
+
+function placementTables(tableList) {
+    const foodTables = tableList.filter(table => table.role === 'food');
+    const playstationTables = tableList.filter(table => table.role === 'playstation');
+    const sortedTables = foodTables.concat(playstationTables);
+
+    function role(role) {
+        if (role === 'playstation') {
+            return 'Playstation';
+        } else if (role === 'food') {
+            return 'Yemək';
+        };
+    };
+
+    for (const table of sortedTables) {
+        tablesDiv.innerHTML += `
+                <div class="col-auto">
+                    <div class="card custom-card ${table.isHaveOrder || table.isHaveTime ? 'active-custom-card' : ''} border-primary">
+                        <button class="btn btn-primary card-btn" onclick="openDetails(${table.id})">Bax</button>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary">${table.name}</h5>
+                            <h6 class="card-title fw-bold text-primary">${role(table.role)}</h6>
+                        </div>
+                    </div>
+                </div>
+            `;
     };
 };
 
@@ -60,96 +101,26 @@ function placementCategories(categoryList) {
     });
 };
 
-let products = [];
-let categories = [];
+let tables = new Array();
+let products = new Array();
+let categories = new Array();
+
 document.addEventListener("DOMContentLoaded", async function () {
+    tables = await getTables()
     products = await getProducts();
     categories = await getCategories();
+    placementTables(tables);
     placementCategories(categories);
 });
-
-async function isActive(id) {
-    let res = await fetch(`/api/worker/table/${id}/is-active`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    });
-
-    if (res.ok) {
-        res = await res.json();
-        return res.isActive;
-    };
-
-    return false;
-};
-
-async function getTables() {
-    let res = await fetch('/api/worker/table', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    });
-
-    if (res.ok) {
-        res = await res.json();
-        const tables = res.tables;
-
-        const foodTables = tables.filter(table => table.role === 'food');
-        const playstationTables = tables.filter(table => table.role === 'playstation');
-        const sortedTables = foodTables.concat(playstationTables);
-
-        function role(role) {
-            if (role === 'playstation') {
-                return 'Playstation';
-            } else if (role === 'food') {
-                return 'Yemək';
-            };
-        };
-
-        for (const table of sortedTables) {
-            tablesDiv.innerHTML += `
-                <div class="col-auto">
-                    <div class="card custom-card ${await isActive(table.id) ? 'active-custom-card' : ''} border-primary">
-                        <button class="btn btn-primary card-btn" onclick="openDetails(${table.id})">Bax</button>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold text-primary">${table.name}</h5>
-                            <h6 class="card-title fw-bold text-primary">${role(table.role)}</h6>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-    } else {
-        res = await res.json();
-        alert(res.message);
-    };
-};
 
 document.addEventListener('DOMContentLoaded', () => {
     getTables();
 });
 
-async function getTable(id) {
-    let res = await fetch(`/api/worker/table/${id}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    });
-
-    if (res.ok) {
-        res = await res.json();
-        return res.table;
-    };
-
-    return {};
-};
-
 async function openDetails(id) {
-    const table = await getTable(id);
-    const tableIsActive = await isActive(id);
+    const table = tables.find(table => 
+        table.id === id
+    );
     detailsContent.innerHTML = '';
 
     if (table.role === 'playstation') {
@@ -170,7 +141,7 @@ async function openDetails(id) {
             </div>
         `;
 
-    if (tableIsActive) {
+    if (table.isHaveOrder || table.isHaveTime) {
         detailsContent.innerHTML += `
                 <div class="col-12">
                     <div class="d-grid">
@@ -187,8 +158,5 @@ async function openDetails(id) {
 async function openAddOrder(id) {
     closeModal(detailsModalInstance);
     currentTableId = id;
-
-
-
     openModal(addOrderModalInstance);
 };

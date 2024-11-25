@@ -12,7 +12,17 @@ async function getAllOrderDB() {
     });
 };
 
-async function getOneOrderDB(param, value) {
+async function getOrderOneTableDB(tableId) {
+    return await new Promise((resolve, reject) => {
+        sqlcommand = `SELECT * FROM "order" WHERE tableId = ${tableId}`;
+        db.all(sqlcommand, [], (err, data) => {
+            if (err) { reject(err); }
+            else { resolve(data); }
+        });
+    });
+};
+
+async function getOrderDB(param, value) {
     return await new Promise((resolve, reject) => {
         sqlcommand = `SELECT * FROM order WHERE ${param} = ?`;
         db.get(sqlcommand, [value], (err, data) => {
@@ -22,18 +32,8 @@ async function getOneOrderDB(param, value) {
     });
 };
 
-async function getOrderDB(param, value) {
-    return await new Promise((resolve, reject) => {
-        sqlcommand = `SELECT * FROM "order" WHERE ${param} = ?`;
-        db.all(sqlcommand, [value], (err, data) => {
-            if (err) { reject(err); }
-            else { resolve(data); }
-        });
-    });
-};
-
 export {
     getAllOrderDB,
-    getOneOrderDB,
+    getOrderOneTableDB,
     getOrderDB
 };

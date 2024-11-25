@@ -29,6 +29,7 @@ import adminTableRouter from './routers/admin-table.js';
 import adminProductRouter from './routers/admin-product.js';
 import adminExpenseRouter from './routers/admin-expense.js';
 import workerTableRouter from './routers/worker-table.js';
+import workerProductRouter from './routers/worker-product.js';
 
 app.use('/', pageRouter);
 app.use('/api', commonRouter);
@@ -37,3 +38,4 @@ app.use('/api/admin/table', adminTableRouter);
 app.use('/api/admin/product', adminProductRouter);
 app.use('/api/admin/expense', adminExpenseRouter);
 app.use('/api/worker/table', workerTableRouter);
+app.use('/api/worker/product', workerProductRouter);

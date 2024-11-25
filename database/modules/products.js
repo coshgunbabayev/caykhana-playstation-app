@@ -2,6 +2,16 @@ import db from '../main.js';
 
 let sqlcommand;
 
+async function getAllProductsDB() {
+    return await new Promise((resolve, reject) => {
+        sqlcommand = `SELECT * FROM products WHERE (active)=("true")`;
+        db.all(sqlcommand, [], (err, data) => {
+            if (err) { reject(err); }
+            else { resolve(data); }
+        });
+    });
+};
+
 async function getAllProductsOneTypeDB(type) {
     return await new Promise((resolve, reject) => {
         sqlcommand = `SELECT * FROM products WHERE (type,active)=("${type}","true")`;
@@ -55,6 +65,7 @@ async function updateProductDB(id, params, values) {
 };
 
 export {
+    getAllProductsDB,
     getAllProductsOneTypeDB,
     getProductDB,
     createAloneProductDB,

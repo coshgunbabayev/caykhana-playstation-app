@@ -12,10 +12,10 @@ async function getAllTimeDB() {
     });
 };
 
-async function getTimeDB(param, value) {
+async function getTimeOneTableDB(tableId) {
     return await new Promise((resolve, reject) => {
-        sqlcommand = `SELECT * FROM time WHERE ${param} = ?`;
-        db.get(sqlcommand, [value], (err, data) => {
+        sqlcommand = `SELECT * FROM time WHERE tableId = ${tableId}`;
+        db.get(sqlcommand, [], (err, data) => {
             if (err) { reject(err); }
             else { resolve(data); }
         });
@@ -24,5 +24,5 @@ async function getTimeDB(param, value) {
 
 export {
     getAllTimeDB,
-    getTimeDB
+    getTimeOneTableDB
 };

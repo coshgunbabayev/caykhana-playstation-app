@@ -123,6 +123,19 @@ async function openDetails(id) {
     );
     detailsContent.innerHTML = '';
 
+    if (table.isHaveOrder) {
+        let res = await fetch('/api/worker/table/:id/order', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (res.ok) {
+            res = await res.json();
+        };
+    };
+
     if (table.role === 'playstation') {
         detailsContent.innerHTML += `
                 <div class="col-12">

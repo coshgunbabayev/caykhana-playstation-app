@@ -16,6 +16,9 @@ async function createTable(req, res) {
     const { name, role } = req.body;
     const err = new Object();
 
+    const a =
+    'coshgun';
+
     if (!name) {
         err.name = 'nameIsRequired';
     };
@@ -25,9 +28,7 @@ async function createTable(req, res) {
     };
 
     if (await getTableDB('name', name)) {
-        return res.status(400).json({
-            name: 'nameIsUsed'
-        });
+        err.name = 'nameIsUsed';
     };
 
     if (Object.keys(err).length > 0) {

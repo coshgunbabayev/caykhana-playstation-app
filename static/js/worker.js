@@ -2,7 +2,9 @@ const tablesDiv = document.getElementById('tablesDiv');
 const detailsModal = document.getElementById('detailsModal');
 const detailsContent = document.getElementById('detailsContent');
 const addOrderModal = document.getElementById('addOrderModal');
+const addTimeModal = document.getElementById('addTimeModal');
 const addOrderForm = document.getElementById('addOrderForm');
+const addTimeForm = document.getElementById('addTimeForm');
 
 const categoryInputs = document.getElementById('categoryInputs');
 const productInputs = document.getElementById('productInputs');
@@ -12,6 +14,7 @@ const quantityError = document.getElementById('quantityError');
 
 const detailsModalInstance = new bootstrap.Modal(detailsModal);
 const addOrderModalInstance = new bootstrap.Modal(addOrderModal);
+const addTimeModalInstance = new bootstrap.Modal(addTimeModal);
 
 let currentTableId;
 
@@ -140,13 +143,17 @@ async function openDetails(id) {
     };
 
     if (table.role === 'playstation') {
-        detailsContent.innerHTML += `
+        if (!table.isHaveTime) {
+            detailsContent.innerHTML += `
                 <div class="col-12">
                     <div class="d-grid">
-                        <button class="btn btn-primary btn-lg" type="text">Vaxt qur</button>
+                        <button class="btn btn-primary btn-lg" type="text" onclick="openAddTime(${id});">Vaxt qur</button>
                     </div>
                 </div>
             `;
+        } else {
+
+        };
     };
 
     detailsContent.innerHTML += `
@@ -228,7 +235,7 @@ addOrderForm.addEventListener('submit', async (e) => {
     productError.innerText = '';
     quantityError.innerText = '';
 
-    let res = await fetch('/api/worker/order', {
+    let res = await fetch(`/api/worker/table/${currentTableId}/order`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -245,7 +252,7 @@ addOrderForm.addEventListener('submit', async (e) => {
         res = await res.json();
 
         if (res.product) {
-            switch (res.name) {
+            switch (res.product) {
                 case 'productIsRequired':
                     productError.innerText = 'Məhsul məcburidir';
                     break;
@@ -255,9 +262,15 @@ addOrderForm.addEventListener('submit', async (e) => {
         if (res.quantity) {
             switch (res.quantity) {
                 case 'quantityIsRequired':
-                    saleError.innerText = 'Say məcburidir';
+                    quantityError.innerText = 'Say məcburidir';
                     break;
             };
         };
     };
 });
+
+async function openAddTime(id) {
+    closeModal(detailsModalInstance);
+    currentTableId = id;
+    openModal(addTimeModalInstance);
+};

@@ -32,8 +32,28 @@ async function getOrderDB(param, value) {
     });
 };
 
+async function createOrderDB(tableId, productId, quantity) {
+    sqlcommand = `INSERT INTO "order" (tableId, productId, quantity) VALUES (${tableId}, ${productId}, ${quantity})`;
+    await db.run(sqlcommand, (err) => {
+        if (err) {
+            console.log(err);
+            
+            throw new Error('')
+        };
+    });
+};
+
+async function updateOrderDB(id, param, value) {
+    sqlcommand = `UPDATE "order" SET ${param} = ${value} WHERE id = ${id}`;
+    await db.run(sqlcommand, [], (err) => {
+        if (err) return console.error(err);
+    });
+};
+
 export {
     getAllOrderDB,
     getOrderOneTableDB,
-    getOrderDB
+    getOrderDB,
+    createOrderDB,
+    updateOrderDB
 };

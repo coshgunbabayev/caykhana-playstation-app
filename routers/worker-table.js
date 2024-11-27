@@ -3,7 +3,8 @@ const router = new Router();
 
 import {
     getTable,
-    getOneTable
+    getOneTable,
+    getOrder
 } from '../controllers/worker-table.js';
 
 router.route('/')
@@ -11,5 +12,8 @@ router.route('/')
 
 router.route('/:id')
     .get(getOneTable)
+
+router.route('/:id/order')
+    .get(getOrder);
 
 export default router;

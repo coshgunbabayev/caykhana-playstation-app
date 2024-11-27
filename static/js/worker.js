@@ -5,6 +5,7 @@ const addOrderModal = document.getElementById('addOrderModal');
 const addOrderForm = document.getElementById('addOrderForm');
 
 const categoryInputs = document.getElementById('categoryInputs');
+const productInputs = document.getElementById('productInputs');
 
 const detailsModalInstance = new bootstrap.Modal(detailsModal);
 const addOrderModalInstance = new bootstrap.Modal(addOrderModal);
@@ -95,8 +96,8 @@ function placementTables(tableList) {
 function placementCategories(categoryList) {
     categoryList.forEach(category => {
         categoryInputs.innerHTML += `
-            <input type="radio" class="btn-check" id="category${category.id}" name="category" value="${category.en}">
-            <label for="category${category.id}" class="btn btn-outline-primary rounded-pill flex-fill">${category.az}</label>
+            <input type="radio" class="btn-check" id="category${category.en}" name="category" value="${category.en}"  onclick="changeCategory('${category.en}')">
+            <label for="category${category.en}" class="btn btn-outline-primary rounded-pill flex-fill">${category.az}</label>
         `;
     });
 };
@@ -113,18 +114,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     placementCategories(categories);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    getTables();
-});
-
 async function openDetails(id) {
-    const table = tables.find(table => 
+    const table = tables.find(table =>
         table.id === id
     );
     detailsContent.innerHTML = '';
 
     if (table.isHaveOrder) {
-        let res = await fetch('/api/worker/table/:id/order', {
+        let res = await fetch(`/api/worker/table/${id}/order`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -133,6 +130,9 @@ async function openDetails(id) {
 
         if (res.ok) {
             res = await res.json();
+            const orders = res.orders;
+
+            console.log(orders);
         };
     };
 
@@ -172,4 +172,47 @@ async function openAddOrder(id) {
     closeModal(detailsModalInstance);
     currentTableId = id;
     openModal(addOrderModalInstance);
+
+    const defaultCategory = document.getElementById('categorypopular');
+    if (defaultCategory.checked) {
+        changeCategory(defaultCategory.value);
+    };
+};
+
+function placementProducts(productList) {
+    productInputs.innerHTML = '';
+    productList.forEach(product => {
+        productInputs.innerHTML += `
+            <input type="radio" class="btn-check" id="product${product.id}" name="product" value="${product.id}">
+            <label for="product${product.id}" class="btn btn-outline-primary rounded-pill flex-fill">${product.name} ${product.sale}azn</label>
+        `;
+    });
+};
+
+function changeCategory(category) {
+    console.log(category);
+
+    switch (category) {
+        case 'popular':
+            placementProducts(
+                products
+                    .sort((a, b) => b.sold - a.sold)
+                    .slice(0, Math.min(products.length, 5))
+            );
+            break;
+
+        case 'set':
+            placementProducts(
+                products
+                    .filter(product => product.type === 'set')
+            );
+            break;
+
+        default:
+            placementProducts(
+                products
+                    .filter(product => product.category === category)
+            );
+            break;
+    };
 };

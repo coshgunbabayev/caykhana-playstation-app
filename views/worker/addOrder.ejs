@@ -1,4 +1,4 @@
-<div class="modal fade" id="addOrderModal" tabindex="-1" aria-labelledby="addOrderModalLabel" aria-hidden="true">
+<div class="modal fade" id="addOrderModal" tabindex="-1" aria-labelledby="addOrderModalLabel" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -12,21 +12,41 @@
                 <form id="addOrderForm">
                     <div class="row gy-2 overflow-hidden">
 
+                        <!-- categories -->
                         <div class="col-12 mb-3">
                             <div class="btn-group d-flex flex-wrap gap-2" id="categoryInputs" role="group"
                                 aria-label="role">
 
-                                <input type="radio" class="btn-check" id="categoryPopular" name="category"
-                                    value="popular">
-                                <label for="categoryPopular"
+                                <input type="radio" class="btn-check" id="categorypopular" name="category"
+                                    value="popular" onclick="changeCategory('popular')" checked>
+                                <label for="categorypopular"
                                     class="btn btn-outline-primary rounded-pill flex-fill">Populyar</label>
 
-
+                                <input type="radio" class="btn-check" id="categoryset" name="category" value="set"
+                                    onclick="changeCategory('set')">
+                                <label for="categoryset"
+                                    class="btn btn-outline-primary rounded-pill flex-fill">Setlər</label>
 
                             </div>
                             <div class="error" id="categoryError"></div>
                         </div>
 
+                        <hr>
+
+                        <!-- products -->
+                        <div class="col-12 mb-3">
+                            <div class="btn-group d-flex flex-wrap gap-2" id="productInputs" role="group"
+                                aria-label="role">
+
+                                
+
+                            </div>
+                            <div class="error" id="categoryError"></div>
+                        </div>
+
+                        <hr>
+
+                        <!-- saylar -->
                         <div class="col-12 mb-3">
                             <div class="btn-group d-flex" id="quantity" role="group" aria-label="quantity">
                                 <input type="radio" class="btn-check" id="quantity1" name="quantity" value="1">

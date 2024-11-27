@@ -22,7 +22,7 @@ async function getTable(req, res) {
 
         if (tables[i].role === 'playstation') {
             tables[i].isHaveTime = Boolean(await getTimeOneTableDB(tables[i].id) &&
-            Object.keys(await getTimeOneTableDB(tables[i].id)).length > 0);
+                Object.keys(await getTimeOneTableDB(tables[i].id)).length > 0);
         };
     };
 
@@ -34,7 +34,21 @@ async function getTable(req, res) {
 async function getOneTable(req, res) {
 };
 
+async function getOrder(req, res) {
+    const { id } = req.params;
+    
+    if (isNaN(Number(id))) {
+        return res.status(400).json({});
+    }
+    
+    const orders = await getOrderOneTableDB(Number(id));
+    res.status(200).json({
+        orders
+    });
+};
+
 export {
     getTable,
-    getOneTable
+    getOneTable,
+    getOrder
 };

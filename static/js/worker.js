@@ -7,6 +7,9 @@ const addOrderForm = document.getElementById('addOrderForm');
 const categoryInputs = document.getElementById('categoryInputs');
 const productInputs = document.getElementById('productInputs');
 
+const productError = document.getElementById('productError');
+const quantityError = document.getElementById('quantityError');
+
 const detailsModalInstance = new bootstrap.Modal(detailsModal);
 const addOrderModalInstance = new bootstrap.Modal(addOrderModal);
 
@@ -216,3 +219,45 @@ function changeCategory(category) {
             break;
     };
 };
+
+addOrderForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(addOrderForm);
+
+    productError.innerText = '';
+    quantityError.innerText = '';
+
+    let res = await fetch('/api/worker/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            productId: formData.get('product'),
+            quantity: formData.get('quantity'),
+        })
+    });
+
+    if (res.ok) {
+        document.location.reload();
+    } else {
+        res = await res.json();
+
+        if (res.product) {
+            switch (res.name) {
+                case 'productIsRequired':
+                    productError.innerText = 'Məhsul məcburidir';
+                    break;
+            };
+        };
+
+        if (res.quantity) {
+            switch (res.quantity) {
+                case 'quantityIsRequired':
+                    saleError.innerText = 'Say məcburidir';
+                    break;
+            };
+        };
+    };
+});

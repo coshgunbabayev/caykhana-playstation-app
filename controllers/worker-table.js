@@ -1,4 +1,9 @@
 import {
+    getAllProductsDB,
+    updateProductDB
+} from '../database/modules/products.js';
+
+import {
     getAllTableDB,
     getTableDB,
 } from '../database/modules/table.js';
@@ -8,14 +13,21 @@ import {
     getOrderOneTableDB,
     getOrderDB,
     createOrderDB,
-    updateOrderDB
+    updateOrderDB,
+    deleteOrderDB
 } from '../database/modules/worker/order.js';
 
 import {
     getAllTimeDB,
     getTimeOneTableDB,
-    createTimeDB
+    createTimeDB,
+    deleteTimeDB
 } from '../database/modules/worker/time.js';
+
+import {
+    getAllIncomeDB,
+    createIncomeDB
+} from '../database/modules/income.js'
 
 async function getTable(req, res) {
     const tables = await getAllTableDB();
@@ -34,7 +46,49 @@ async function getTable(req, res) {
     });
 };
 
-async function getOneTable(req, res) {
+async function closeTable(req, res) {
+    const { id } = req.params;
+
+    let orderSummaryPrice = 0;
+
+    const table = await getTableDB('id', Number(id));
+    const products = await getAllProductsDB();
+    const orders = await getOrderOneTableDB(Number(id));
+
+    for (const order of orders) {
+        const product = products.find(product =>
+            product.id == order.productId
+        );
+        orderSummaryPrice += product.sale * order.quantity;
+
+        await deleteOrderDB(order.id);
+
+        switch (product.type) {
+            case 'warehouse':
+                await updateProductDB(product.id, ['quantity', 'sold'], [product.quantity - order.quantity, product.sold + order.quantity]);
+                break;
+
+            case 'withoutWarehouse':
+                await updateProductDB(product.id, ['sold'], [product.sold + order.quantity]);
+                break;
+
+            //// settttttttttttt
+            default:
+                break;
+        };
+    };
+
+    if (table.role === 'playstation') {
+        const time = await getTimeOneTableDB(Number(id));
+        if (time !== undefined) {
+            orderSummaryPrice += Number((1 * (new Date() - new Date(time.start)) / (1000 * 60 * 60)).toFixed(2));
+            await deleteTimeDB(time.id);
+        };
+    };
+
+    await createIncomeDB(table.name, orderSummaryPrice);
+
+    res.status(200).json({});
 };
 
 async function getOrder(req, res) {
@@ -84,7 +138,7 @@ async function getTime(req, res) {
 
     if (isNaN(Number(id))) {
         return res.status(400).json({});
-    }
+    };
 
     const time = await getTimeOneTableDB(Number(id));
     res.status(200).json({
@@ -116,7 +170,7 @@ async function createTime(req, res) {
 
 export {
     getTable,
-    getOneTable,
+    closeTable,
     getOrder,
     createOrder,
     getTime,

@@ -34,8 +34,16 @@ async function createTimeDB(tableId, type, isSet, time = 0) {
     });
 };
 
+async function deleteTimeDB(id) {
+    const sqlcommand = `DELETE FROM time WHERE id = ${id}`;
+    await db.run(sqlcommand, [], (err) => {
+        if (err) return console.error(err);
+    });
+};
+
 export {
     getAllTimeDB,
     getTimeOneTableDB,
-    createTimeDB
+    createTimeDB,
+    deleteTimeDB
 };

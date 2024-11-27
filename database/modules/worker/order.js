@@ -37,7 +37,7 @@ async function createOrderDB(tableId, productId, quantity) {
     await db.run(sqlcommand, (err) => {
         if (err) {
             console.log(err);
-            
+
             throw new Error('')
         };
     });
@@ -50,10 +50,18 @@ async function updateOrderDB(id, param, value) {
     });
 };
 
+async function deleteOrderDB(id) {
+    const sqlcommand = `DELETE FROM "order" WHERE id = ${id}`;
+    await db.run(sqlcommand, [], (err) => {
+        if (err) return console.error(err);
+    });
+};
+
 export {
     getAllOrderDB,
     getOrderOneTableDB,
     getOrderDB,
     createOrderDB,
-    updateOrderDB
+    updateOrderDB,
+    deleteOrderDB
 };

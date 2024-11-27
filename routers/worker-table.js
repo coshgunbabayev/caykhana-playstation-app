@@ -3,7 +3,7 @@ const router = new Router();
 
 import {
     getTable,
-    getOneTable,
+    closeTable,
     getOrder,
     createOrder,
     getTime,
@@ -14,7 +14,7 @@ router.route('/')
     .get(getTable);
 
 router.route('/:id')
-    .get(getOneTable)
+    .delete(closeTable);
 
 router.route('/:id/order')
     .get(getOrder)

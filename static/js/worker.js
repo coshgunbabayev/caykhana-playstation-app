@@ -191,7 +191,7 @@ async function openDetails(id) {
             ///// burada 1 qiymetdir
             const price = Number((1 * calculateElapsedHours(time.start)).toFixed(2));
             orderSummaryPrice += price;
-            
+
             orderSummaryContent.innerHTML += `
                 <div class="d-flex justify-content-between">
                     <span>Playstation</span>
@@ -233,7 +233,7 @@ async function openDetails(id) {
         detailsContent.innerHTML += `
                 <div class="col-12">
                     <div class="d-grid">
-                        <button class="btn btn-primary btn-lg" type="text">Masanı bağla ( ${orderSummaryPrice} azn )</button>
+                        <button class="btn btn-primary btn-lg" type="text" onclick="closeTable(${id})")>Masanı bağla ( ${orderSummaryPrice} azn )</button>
                     </div>
                 </div>
             `;
@@ -369,3 +369,20 @@ addTimeForm.addEventListener('submit', async (e) => {
         };
     };
 });
+
+async function closeTable(id) {
+    if (!confirm('Masa bağlansın?')) {
+        return
+    };
+
+    let res = await fetch(`/api/worker/table/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        document.location.reload();
+    };
+};

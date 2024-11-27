@@ -1,5 +1,7 @@
 const tablesDiv = document.getElementById('tablesDiv');
 const detailsModal = document.getElementById('detailsModal');
+const orderSummary = document.getElementById('orderSummary');
+const orderSummaryContent = document.getElementById('orderSummaryContent');
 const detailsContent = document.getElementById('detailsContent');
 const addOrderModal = document.getElementById('addOrderModal');
 const addTimeModal = document.getElementById('addTimeModal');
@@ -121,27 +123,56 @@ document.addEventListener("DOMContentLoaded", async function () {
     placementCategories(categories);
 });
 
+async function getOrders(id) {
+    let res = await fetch(`/api/worker/table/${id}/order`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        res = await res.json();
+        return res.orders;
+    };
+};
+
 async function openDetails(id) {
     const table = tables.find(table =>
         table.id === id
     );
-    detailsContent.innerHTML = '';
 
-    if (table.isHaveOrder) {
-        let res = await fetch(`/api/worker/table/${id}/order`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+    const isActive = table.isHaveOrder || table.isHaveTime;
+    let orderSummaryPrice = 0;
+
+    if (isActive) {
+        orderSummary.style.display = 'block';
+        const orders = await getOrders(id);
+
+        orderSummaryContent.innerHTML = '';
+        orders.forEach(order => {
+            const product = products.find(product =>
+                product.id == order.productId
+            );
+
+            const price = product.sale * order.quantity;
+            orderSummaryPrice += price;
+
+            orderSummaryContent.innerHTML += `
+                <div class="d-flex justify-content-between">
+                    <span>${product.name}</span>
+                    <span>${order.quantity} ədəd</span>
+                    <span>${price}azn</span>
+                </div>
+            `;
         });
 
-        if (res.ok) {
-            res = await res.json();
-            const orders = res.orders;
+        if (table.isHaveTime) {
 
-            console.log("burani da yaz");
         };
     };
+
+    detailsContent.innerHTML = '';
 
     if (table.role === 'playstation') {
         if (!table.isHaveTime) {
@@ -165,11 +196,11 @@ async function openDetails(id) {
             </div>
         `;
 
-    if (table.isHaveOrder || table.isHaveTime) {
+    if (isActive) {
         detailsContent.innerHTML += `
                 <div class="col-12">
                     <div class="d-grid">
-                        <button class="btn btn-primary btn-lg" type="text">Masanı bağla</button>
+                        <button class="btn btn-primary btn-lg" type="text">Masanı bağla ( ${orderSummaryPrice} azn )</button>
                     </div>
                 </div>
             `;

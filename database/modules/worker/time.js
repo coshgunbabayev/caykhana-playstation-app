@@ -22,12 +22,14 @@ async function getTimeOneTableDB(tableId) {
     });
 };
 
-async function createTimeDB(tableId, type, time = 0) {
-    sqlcommand = `INSERT INTO time (tableId, type, time) VALUES (${tableId}, '${type}', ${time})`;
+async function createTimeDB(tableId, type, isSet, time = 0) {
+    const now = new Date();
+    const startTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    sqlcommand = `INSERT INTO time (tableId, type, isSet, start, time) VALUES (${tableId}, '${type}', '${isSet}', '${startTime}', ${time})`;
     await db.run(sqlcommand, (err) => {
         if (err) {
             console.log(err);
-            
+
             throw new Error('')
         };
     });

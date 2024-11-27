@@ -89,9 +89,9 @@ async function createTime(req, res) {
     };
 
     if (time === 'unlimited') {
-        await createTimeDB(Number(id), 'unlimited');
+        await createTimeDB(Number(id), 'unlimited', false);
     } else {
-        await createTimeDB(Number(id), 'limited', Number(time));
+        await createTimeDB(Number(id), 'limited', false, Number(time));
     };
 
     res.status(200).json({});

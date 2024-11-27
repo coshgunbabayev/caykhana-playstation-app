@@ -30,6 +30,12 @@ function getWithoutWarehouse(req, res) {
     });
 };
 
+function getSet(req, res) {
+    res.status(200).render('admin/index', {
+        activePage: 'set'
+    });
+};
+
 function getExpense(req, res) {
     res.status(200).render('admin/index', {
         activePage: 'expense'
@@ -43,5 +49,6 @@ export {
     getTable,
     getWarehouse,
     getWithoutWarehouse,
+    getSet,
     getExpense
 };

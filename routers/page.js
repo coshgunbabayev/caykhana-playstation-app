@@ -8,6 +8,7 @@ import {
     getTable,
     getWarehouse,
     getWithoutWarehouse,
+    getSet,
     getExpense
 } from '../controllers/page.js';
 
@@ -32,6 +33,9 @@ router.route('/admin/warehouse')
 
 router.route('/admin/without-warehouse')
     .get(authenticateForPage, getWithoutWarehouse);
+
+router.route('/admin/set')
+    .get(authenticateForPage, getSet);
 
 router.route('/admin/expense')
     .get(authenticateForPage, getExpense);

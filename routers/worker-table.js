@@ -6,6 +6,7 @@ import {
     getOneTable,
     getOrder,
     createOrder,
+    getTime,
     createTime
 } from '../controllers/worker-table.js';
 
@@ -20,7 +21,7 @@ router.route('/:id/order')
     .post(createOrder);
 
 router.route('/:id/time')
-    // .get(getTime)
+    .get(getTime)
     .post(createTime);
 
 export default router;

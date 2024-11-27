@@ -79,6 +79,19 @@ async function createOrder(req, res) {
     res.status(200).json({});
 };
 
+async function getTime(req, res) {
+    const { id } = req.params;
+
+    if (isNaN(Number(id))) {
+        return res.status(400).json({});
+    }
+
+    const time = await getTimeOneTableDB(Number(id));
+    res.status(200).json({
+        time
+    });
+};
+
 async function createTime(req, res) {
     const { id } = req.params;
     const { time } = req.body;
@@ -86,6 +99,10 @@ async function createTime(req, res) {
 
     if (!time) {
         err.time = 'timeIsRequired';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
     };
 
     if (time === 'unlimited') {
@@ -102,5 +119,6 @@ export {
     getOneTable,
     getOrder,
     createOrder,
+    getTime,
     createTime
 };

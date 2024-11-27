@@ -137,6 +137,24 @@ async function getOrders(id) {
     };
 };
 
+async function getTime(id) {
+    let res = await fetch(`/api/worker/table/${id}/time`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        res = await res.json();
+        return res.time;
+    };
+};
+
+function calculateElapsedHours(givenTime) {
+    return (new Date() - new Date(givenTime)) / (1000 * 60 * 60);
+};
+
 async function openDetails(id) {
     const table = tables.find(table =>
         table.id === id
@@ -168,8 +186,23 @@ async function openDetails(id) {
         });
 
         if (table.isHaveTime) {
+            const time = await getTime(id);
 
+            ///// burada 1 qiymetdir
+            const price = Number((1 * calculateElapsedHours(time.start)).toFixed(2));
+            orderSummaryPrice += price;
+            
+            orderSummaryContent.innerHTML += `
+                <div class="d-flex justify-content-between">
+                    <span>Playstation</span>
+                    <span>${time.type === 'unlimited' ? 'limitsiz' : time.time + ' saat'}</span>
+                    <span>${price}azn</span>
+                </div>
+            `;
         };
+    } else {
+        orderSummary.style.display = 'none';
+        orderSummaryContent.innerHTML = '';
     };
 
     detailsContent.innerHTML = '';

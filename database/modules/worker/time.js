@@ -23,9 +23,8 @@ async function getTimeOneTableDB(tableId) {
 };
 
 async function createTimeDB(tableId, type, isSet, time = 0) {
-    const now = new Date();
-    const startTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-    sqlcommand = `INSERT INTO time (tableId, type, isSet, start, time) VALUES (${tableId}, '${type}', '${isSet}', '${startTime}', ${time})`;
+    const now = new Date().toISOString();
+    sqlcommand = `INSERT INTO time (tableId, type, isSet, start, time) VALUES (${tableId}, '${type}', '${isSet}', '${now}', ${time})`;
     await db.run(sqlcommand, (err) => {
         if (err) {
             console.log(err);

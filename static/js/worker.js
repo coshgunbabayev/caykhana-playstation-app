@@ -11,6 +11,7 @@ const productInputs = document.getElementById('productInputs');
 
 const productError = document.getElementById('productError');
 const quantityError = document.getElementById('quantityError');
+const timeError = document.getElementById('timeError');
 
 const detailsModalInstance = new bootstrap.Modal(detailsModal);
 const addOrderModalInstance = new bootstrap.Modal(addOrderModal);
@@ -138,7 +139,7 @@ async function openDetails(id) {
             res = await res.json();
             const orders = res.orders;
 
-            console.log(orders);
+            console.log("burani da yaz");
         };
     };
 
@@ -200,8 +201,6 @@ function placementProducts(productList) {
 };
 
 function changeCategory(category) {
-    console.log(category);
-
     switch (category) {
         case 'popular':
             placementProducts(
@@ -274,3 +273,35 @@ async function openAddTime(id) {
     currentTableId = id;
     openModal(addTimeModalInstance);
 };
+
+addTimeForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(addTimeForm);
+
+    timeError.innerText = '';
+
+    let res = await fetch(`/api/worker/table/${currentTableId}/time`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            time: formData.get('time')
+        })
+    });
+
+    if (res.ok) {
+        document.location.reload();
+    } else {
+        res = await res.json();
+
+        if (res.time) {
+            switch (res.time) {
+                case 'timeIsRequired':
+                    timeError.innerText = 'Vaxt məcburidir';
+                    break;
+            };
+        };
+    };
+});

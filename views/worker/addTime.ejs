@@ -12,6 +12,31 @@
                 <form id="addTimeForm">
                     <div class="row gy-2 overflow-hidden">
 
+                        <div class="col-12 mb-3">
+                            <div class="btn-group d-flex" id="quantity" role="group" aria-label="quantity">
+
+                                <input type="radio" class="btn-check" id="time1" name="time" value="1">
+                                <label for="time1" class="btn btn-outline-primary flex-fill">1 saat</label>
+
+                                <input type="radio" class="btn-check" id="time2" name="time" value="1.5">
+                                <label for="time2" class="btn btn-outline-primary flex-fill">1.5 saat</label>
+
+                                <input type="radio" class="btn-check" id="time3" name="time" value="2">
+                                <label for="time3" class="btn btn-outline-primary flex-fill">2 saat</label>
+
+                                <input type="radio" class="btn-check" id="time4" name="time" value="unlimited">
+                                <label for="time4" class="btn btn-outline-primary flex-fill">Limitsiz</label>
+
+                            </div>
+                            <div class="error" id="timeError"></div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-grid my-3">
+                                <button class="btn btn-primary btn-lg" type="submit">Qur</button>
+                            </div>
+                        </div>
+
                     </div>
                 </form>
 

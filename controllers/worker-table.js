@@ -13,7 +13,8 @@ import {
 
 import {
     getAllTimeDB,
-    getTimeOneTableDB
+    getTimeOneTableDB,
+    createTimeDB
 } from '../database/modules/worker/time.js';
 
 async function getTable(req, res) {
@@ -68,7 +69,7 @@ async function createOrder(req, res) {
 
     const orders = await getOrderOneTableDB(Number(id));
     const thisOrder = orders.find(order => order.productId == productId);
-    
+
     if (thisOrder === undefined) {
         await createOrderDB(Number(id), Number(productId), Number(quantity));
     } else {
@@ -78,9 +79,28 @@ async function createOrder(req, res) {
     res.status(200).json({});
 };
 
+async function createTime(req, res) {
+    const { id } = req.params;
+    const { time } = req.body;
+    const err = new Object();
+
+    if (!time) {
+        err.time = 'timeIsRequired';
+    };
+
+    if (time === 'unlimited') {
+        await createTimeDB(Number(id), 'unlimited');
+    } else {
+        await createTimeDB(Number(id), 'limited', Number(time));
+    };
+
+    res.status(200).json({});
+};
+
 export {
     getTable,
     getOneTable,
     getOrder,
-    createOrder
+    createOrder,
+    createTime
 };

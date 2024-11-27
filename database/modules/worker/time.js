@@ -22,7 +22,19 @@ async function getTimeOneTableDB(tableId) {
     });
 };
 
+async function createTimeDB(tableId, type, time = 0) {
+    sqlcommand = `INSERT INTO time (tableId, type, time) VALUES (${tableId}, '${type}', ${time})`;
+    await db.run(sqlcommand, (err) => {
+        if (err) {
+            console.log(err);
+            
+            throw new Error('')
+        };
+    });
+};
+
 export {
     getAllTimeDB,
-    getTimeOneTableDB
+    getTimeOneTableDB,
+    createTimeDB
 };

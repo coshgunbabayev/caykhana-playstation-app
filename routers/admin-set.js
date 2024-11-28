@@ -2,7 +2,9 @@ import { Router } from 'express';
 const router = new Router();
 
 import {
-    createSet
+    createSet,
+    updateSet,
+    deleteSet
 } from '../controllers/admin-set.js';
 
 import {
@@ -11,5 +13,9 @@ import {
 
 router.route('/')
     .post(authenticateForApi, createSet);
+
+router.route('/:id')
+    .put(authenticateForApi, updateSet)
+    .delete(authenticateForApi, deleteSet);
 
 export default router;

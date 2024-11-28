@@ -197,7 +197,7 @@ editSetForm.addEventListener('submit', async (e) => {
     };
 });
 
-async function deleteProduct(id) {
+async function deleteSet(id) {
     if (!confirm('Set silinsin?')) {
         return;
     };

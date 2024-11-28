@@ -34,7 +34,7 @@ async function getProductDB(param, value) {
 
 async function createAloneProductDB(type, name, category, sale) {
     sale = Number(sale.toFixed(2));
-    sqlcommand = `INSERT INTO products (type, active, name, category, quantity, purchase, sale, sold) VALUES ("${type}", "true", '${name}', '${category}', ${0}, ${0}, ${sale}, ${0})`;
+    sqlcommand = `INSERT INTO products (type, active, name, category, structure, quantity, purchase, sale, sold) VALUES ("${type}", "true", '${name}', '${category}', '', ${0}, ${0}, ${sale}, ${0})`;
     await db.run(sqlcommand, (err) => {
         if (err) {
             throw new Error('')
@@ -43,8 +43,13 @@ async function createAloneProductDB(type, name, category, sale) {
 };
 
 async function createSetProductDB(type, name, category, sale) {
+    const structure = JSON.stringify({
+        products: [],
+        time: 0
+    });
+
     sale = Number(sale.toFixed(2));
-    sqlcommand = `INSERT INTO products (type, active, name, category, quantity, purchase, sale, sold) VALUES ("${type}", "true", '${name}', '${category}', ${0}, ${0}, ${sale}, ${0})`;
+    sqlcommand = `INSERT INTO products (type, active, name, category, structure, quantity, purchase, sale, sold) VALUES ("${type}", "true", '${name}', '${category}', '${structure}', ${0}, ${0}, ${sale}, ${0})`;
     await db.run(sqlcommand, (err) => {
         if (err) {
             throw new Error('')

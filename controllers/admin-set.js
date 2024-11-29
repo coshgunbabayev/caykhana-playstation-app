@@ -96,19 +96,13 @@ async function updateProductOfSet(req, res) {
     const set = await getProductDB('id', Number(id));
     const structure = JSON.parse(set.structure);
 
-    console.log(structure);///////////////////
-
     const product = structure.products.find(product => 
         product.id === Number(productId)
-    ); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    console.log(product);
-    
-
+    ); 
 
     if (product === undefined) {
         structure.products.push({
-            id: Number(id),
+            id: Number(productId),
             quantity: Number(quantity)
         });
     } else {

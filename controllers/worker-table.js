@@ -136,6 +136,19 @@ async function createOrder(req, res) {
     res.status(200).json({});
 };
 
+async function deleteOneOrder(req, res) {
+    const { id } = req.params;
+    const order = await getOrderDB('id', Number(id));
+    await updateOrderDB(order.id, 'quantity', order.quantity - 1)
+    res.status(200).json({});
+};
+
+async function deleteOrder(req, res) {
+    const { id } = req.params;
+    await deleteOrderDB(Number(id));
+    res.status(200).json({});
+};
+
 async function getTime(req, res) {
     const { id } = req.params;
 
@@ -176,6 +189,8 @@ export {
     closeTable,
     getOrder,
     createOrder,
+    deleteOneOrder,
+    deleteOrder,
     getTime,
     createTime
 };

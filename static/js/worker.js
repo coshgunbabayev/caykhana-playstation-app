@@ -177,11 +177,36 @@ async function openDetails(id) {
             orderSummaryPrice += price;
 
             orderSummaryContent.innerHTML += `
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between mb-3">
                     <span>${product.name} ( ${order.quantity} ədəd )</span>
-                    <span>${price}azn</span>
+                    <span>${price} azn
+                    
+                        ${order.quantity > 1 ? `<button class="btn btn-danger btn-sm mx-1" onclick="deleteOneOrder(${order.id})">Birini sil</button>` : ''}
+                        <button class="btn btn-danger btn-sm mx-1" onclick="deleteOrder(${order.id})">Sil</button>
+                    </span>
                 </div>
             `;
+
+            if (product.type === 'set') {
+                const structure = JSON.parse(product.structure);
+
+                structure.products.forEach(setProduct => {
+                    const thisProduct = products.find(product => product.id === setProduct.id);
+                    orderSummaryContent.innerHTML += `
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>--- ${thisProduct.name} ( ${setProduct.quantity * order.quantity} ədəd )</span>
+                        </div>
+                    `;
+                });
+
+                if (structure.time > 0) {
+                    orderSummaryContent.innerHTML += `
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>--- Playstation ( ${structure.time * order.quantity} saat )</span>
+                        </div>
+                    `;
+                };
+            };
         });
 
         if (table.isHaveTime) {
@@ -194,7 +219,9 @@ async function openDetails(id) {
             orderSummaryContent.innerHTML += `
                 <div class="d-flex justify-content-between">
                     <span>Playstation ( ${time.type === 'unlimited' ? 'limitsiz' : time.time + ' saat'} )</span>
-                    <span>${price}azn</span>
+                    <span>${price} azn
+                        <button class="btn btn-danger btn-sm mx-1" onclick="">Sil</button>
+                    </span>
                 </div>
             `;
         };
@@ -328,6 +355,32 @@ addOrderForm.addEventListener('submit', async (e) => {
         };
     };
 });
+
+async function deleteOneOrder(id) {
+    let res = await fetch(`/api/worker/table/order/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        document.location.reload();
+    };
+};
+
+async function deleteOrder(id) {
+    let res = await fetch(`/api/worker/table/order/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        document.location.reload();
+    };    
+};
 
 async function openAddTime(id) {
     closeModal(detailsModalInstance);

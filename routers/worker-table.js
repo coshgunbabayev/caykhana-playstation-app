@@ -6,6 +6,8 @@ import {
     closeTable,
     getOrder,
     createOrder,
+    deleteOneOrder,
+    deleteOrder,
     getTime,
     createTime
 } from '../controllers/worker-table.js';
@@ -19,6 +21,10 @@ router.route('/:id')
 router.route('/:id/order')
     .get(getOrder)
     .post(createOrder);
+
+router.route('/order/:id')
+    .put(deleteOneOrder)
+    .delete(deleteOrder);
 
 router.route('/:id/time')
     .get(getTime)

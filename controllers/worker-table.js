@@ -38,8 +38,8 @@ async function getTable(req, res) {
         tables[i].isHaveOrder = (await getOrderOneTableDB(tables[i].id)).length > 0;
 
         if (tables[i].role === 'playstation') {
-            tables[i].isHaveTime = Boolean(await getTimeOneTableDB(tables[i].id) &&
-                Object.keys(await getTimeOneTableDB(tables[i].id)).length > 0);
+            const time = await getTimeOneTableDB(tables[i].id);
+            tables[i].isHaveTime = Boolean(time !== undefined && time.isSet !== 'true')
         };
     };
 
@@ -180,7 +180,10 @@ async function getTime(req, res) {
         return res.status(400).json({});
     };
 
-    const time = await getTimeOneTableDB(Number(id));
+    let time = await getTimeOneTableDB(Number(id));
+    if (time.isSet === 'true') {
+        time = undefined;
+    };
     res.status(200).json({
         time
     });

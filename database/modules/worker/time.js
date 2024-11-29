@@ -34,6 +34,13 @@ async function createTimeDB(tableId, type, isSet, time = 0) {
     });
 };
 
+async function updateTimeDB(id, param, value) {
+    sqlcommand = `UPDATE time SET ${param} = ${value} WHERE id = ${id}`;
+    await db.run(sqlcommand, [], (err) => {
+        if (err) return console.error(err);
+    });
+};
+
 async function deleteTimeDB(id) {
     const sqlcommand = `DELETE FROM time WHERE id = ${id}`;
     await db.run(sqlcommand, [], (err) => {
@@ -45,5 +52,6 @@ export {
     getAllTimeDB,
     getTimeOneTableDB,
     createTimeDB,
+    updateTimeDB,
     deleteTimeDB
 };

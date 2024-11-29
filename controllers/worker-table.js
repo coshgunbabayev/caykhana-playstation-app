@@ -1,5 +1,6 @@
 import {
     getAllProductsDB,
+    getProductDB,
     updateProductDB
 } from '../database/modules/products.js';
 
@@ -21,6 +22,7 @@ import {
     getAllTimeDB,
     getTimeOneTableDB,
     createTimeDB,
+    updateTimeDB,
     deleteTimeDB
 } from '../database/modules/worker/time.js';
 
@@ -127,10 +129,32 @@ async function createOrder(req, res) {
     const orders = await getOrderOneTableDB(Number(id));
     const thisOrder = orders.find(order => order.productId == productId);
 
+    const product = await getProductDB('id', Number(productId));
+
     if (thisOrder === undefined) {
         await createOrderDB(Number(id), Number(productId), Number(quantity));
+
     } else {
         await updateOrderDB(thisOrder.id, 'quantity', thisOrder.quantity + Number(quantity));
+    };
+
+    if (product.type === 'set') {
+        const structure = JSON.parse(product.structure);
+
+        if (structure.time > 0) {
+            const time = await getTimeOneTableDB(Number(id));
+
+            if (time === undefined) {
+                await createTimeDB(Number(id), 'limited', true, structure.time * Number(quantity));
+
+            } else if (time.isSet === 'true') {
+                await updateTimeDB(time.id, 'time', time.time + (structure.time * Number(quantity)));
+
+            } else if (time.isSet === 'false') {
+                await deleteTimeDB(time.id);
+                await createTimeDB(Number(id), 'limited', true, structure.time * Number(quantity));
+            };
+        };
     };
 
     res.status(200).json({});

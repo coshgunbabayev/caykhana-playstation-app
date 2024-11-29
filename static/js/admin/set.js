@@ -183,6 +183,7 @@ async function lookSet(id) {
 
 function addProductToSet() {
     closeAddTimeToSet();
+
     const addProductToSetContent = document.getElementById('addProductToSetContent');
     addProductToSetContent.innerHTML = '';
 
@@ -305,13 +306,75 @@ function closeAddProductToSet() {
 function addTimeToSet() {
     closeAddProductToSet();
 
-    document.getElementById('addTimeToSetContent').innerHTML = `
+    const addTimeToSetContent = document.getElementById('addTimeToSetContent');
+    addTimeToSetContent.innerHTML = '';
+
+    addTimeToSetContent.innerHTML += `
         <div class="col-12 mb-3">
             <div class="d-grid">
                 <button class="btn btn-primary btn-lg" type="text" onclick="closeAddTimeToSet()">Bağla</button>
             </div>
         </div>
     `;
+
+    addTimeToSetContent.innerHTML += `
+    <form id="addTimeToSetForm">
+        <div class="col-12 mb-3">
+            <div class="btn-group d-flex" id="time" role="group" aria-label="time">
+
+                <input type="radio" class="btn-check" id="time1" name="time" value="1">
+                <label for="time1" class="btn btn-outline-primary flex-fill">1 saat</label>
+
+                <input type="radio" class="btn-check" id="time2" name="time" value="1.5">
+                <label for="time2" class="btn btn-outline-primary flex-fill">1.5 saat</label>
+
+                <input type="radio" class="btn-check" id="time3" name="time" value="2">
+                <label for="time3" class="btn btn-outline-primary flex-fill">2 saat</label>
+            </div>
+            <div class="error" id="timeError"></div>
+        </div>
+        
+        <div class="col-12">
+            <div class="d-grid">
+                <button class="btn btn-primary btn-lg" type="text" onclick="addTimeToSetFormSubmit(event)">Əlavə et</button>
+            </div>
+        </div>
+    </form>
+    `;
+};
+
+async function addTimeToSetFormSubmit(e) {
+    e.preventDefault();
+
+    const addTimeToSetForm = document.getElementById('addTimeToSetForm');
+    const formData = new FormData(addTimeToSetForm);
+    const timeError = document.getElementById('timeError');
+
+    timeError.innerText = '';
+
+    let res = await fetch(`/api/admin/set/${detailsModal.dataset.setId}/time`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            time: formData.get('time'),
+        })
+    });
+
+    if (res.ok) {
+        document.location.reload();
+    } else {
+        res = await res.json();
+
+        if (res.time) {
+            switch (res.time) {
+                case 'timeIsRequired':
+                    timeError.innerText = 'Vaxt məcburidir';
+                    break;
+            };
+        };
+    };
 };
 
 function closeAddTimeToSet() {

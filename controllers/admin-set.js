@@ -116,7 +116,27 @@ async function updateProductOfSet(req, res) {
 };
 
 async function updateTimeOfSet(req, res) {
+    const { id } = req.params;
+    const { time } = req.body;
+    const err = new Object();
 
+    if (!time) {
+        err.time = 'timeIsRequired';
+    } else if (isNaN(Number(time))) {
+        return res.status(400).json({});
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
+    const set = await getProductDB('id', Number(id));
+    const structure = JSON.parse(set.structure);
+
+    structure.time += Number(time);
+
+    await updateProductDB(Number(id), ['structure'], [JSON.stringify(structure)]);
+    res.status(200).json({});
 };
 
 export {

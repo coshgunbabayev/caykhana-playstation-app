@@ -9,7 +9,8 @@ import {
     deleteOneOrder,
     deleteOrder,
     getTime,
-    createTime
+    createTime,
+    deleteTime
 } from '../controllers/worker-table.js';
 
 router.route('/')
@@ -28,6 +29,7 @@ router.route('/order/:id')
 
 router.route('/:id/time')
     .get(getTime)
-    .post(createTime);
+    .post(createTime)
+    .delete(deleteTime);
 
 export default router;

@@ -184,6 +184,13 @@ async function createTime(req, res) {
     res.status(200).json({});
 };
 
+async function deleteTime(req, res) {
+    const { id } = req.params;
+    const time = await getTimeOneTableDB(Number(id));
+    await deleteTimeDB(time.id);
+    res.status(200).json({});
+};
+
 export {
     getTable,
     closeTable,
@@ -192,5 +199,6 @@ export {
     deleteOneOrder,
     deleteOrder,
     getTime,
-    createTime
+    createTime,
+    deleteTime
 };

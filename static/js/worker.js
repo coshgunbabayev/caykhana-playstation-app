@@ -162,6 +162,7 @@ async function openDetails(id) {
 
     const isActive = table.isHaveOrder || table.isHaveTime;
     let orderSummaryPrice = 0;
+    let isHaveTime = false;
     orderSummaryContent.innerHTML = '';
 
     if (isActive) {
@@ -200,6 +201,7 @@ async function openDetails(id) {
                 });
 
                 if (structure.time > 0) {
+                    isHaveTime = true;
                     orderSummaryContent.innerHTML += `
                         <div class="d-flex justify-content-between mb-3">
                             <span>--- Playstation ( ${structure.time * order.quantity} saat )</span>
@@ -220,7 +222,7 @@ async function openDetails(id) {
                 <div class="d-flex justify-content-between">
                     <span>Playstation ( ${time.type === 'unlimited' ? 'limitsiz' : time.time + ' saat'} )</span>
                     <span>${price} azn
-                        <button class="btn btn-danger btn-sm mx-1" onclick="">Sil</button>
+                        <button class="btn btn-danger btn-sm mx-1" onclick="deleteTime()">Sil</button>
                     </span>
                 </div>
             `;
@@ -232,7 +234,7 @@ async function openDetails(id) {
     detailsContent.innerHTML = '';
 
     if (table.role === 'playstation') {
-        if (!table.isHaveTime) {
+        if (!table.isHaveTime && !isHaveTime) {
             detailsContent.innerHTML += `
                 <div class="col-12">
                     <div class="d-grid">
@@ -240,8 +242,6 @@ async function openDetails(id) {
                     </div>
                 </div>
             `;
-        } else {
-
         };
     };
 
@@ -419,6 +419,19 @@ addTimeForm.addEventListener('submit', async (e) => {
         };
     };
 });
+
+async function deleteTime() {
+    let res = await fetch(`/api/worker/table/${currentTableId}/time`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        document.location.reload();
+    };  
+};
 
 async function closeTable(id) {
     if (!confirm('Masa bağlansın?')) {

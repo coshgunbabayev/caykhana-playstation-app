@@ -6,7 +6,9 @@ import {
     updateSet,
     deleteSet,
     updateProductOfSet,
-    updateTimeOfSet
+    deleteProductFromSet,
+    updateTimeOfSet,
+    resetTimeOfSet
 } from '../controllers/admin-set.js';
 
 import {
@@ -23,7 +25,11 @@ router.route('/:id')
 router.route('/:id/product')
     .put(authenticateForApi, updateProductOfSet);
 
+router.route('/:setId/product/:productId')
+    .delete(authenticateForApi, deleteProductFromSet);
+
 router.route('/:id/time')
-    .put(authenticateForApi, updateTimeOfSet);
+    .put(authenticateForApi, updateTimeOfSet)
+    .delete(authenticateForApi, resetTimeOfSet);
 
 export default router;

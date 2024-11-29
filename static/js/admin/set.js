@@ -149,10 +149,25 @@ async function lookSet(id) {
     structureSummaryContent.innerHTML = '';
 
     if (structure.products.length > 0 || structure.time > 0) {
-        // structureSummary.style.display = 'block';
-        // const allProducts = await getProducts();
+        structureSummary.style.display = 'block';
 
-        ////////////////
+        structure.products.forEach(product => {
+            structureSummaryContent.innerHTML += `
+                <div class="d-flex justify-content-between mb-3">
+                    <span>${products.find(thisProduct => thisProduct.id === product.id).name} ( ${product.quantity} ədəd )</span>
+                    <button class="btn btn-danger btn-sm mx-1" onclick="deleteProductFromSet(${product.id})">Sil</button>
+                </div>
+            `;
+        });
+
+        if (structure.time > 0) {
+            structureSummaryContent.innerHTML += `
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Playstation ( ${structure.time} saat )</span>
+                    <button class="btn btn-danger btn-sm mx-1" onclick="resetTimeOfSet()">Sil</button>
+                </div>
+            `;
+        };
 
     } else {
         structureSummary.style.display = 'none';
@@ -293,6 +308,19 @@ async function addProductToSetFormSubmit(e) {
     };
 };
 
+async function deleteProductFromSet(id) {
+    let res = await fetch(`/api/admin/set/${detailsModal.dataset.setId}/product/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        document.location.reload();
+    };
+};
+
 function closeAddProductToSet() {
     document.getElementById('addProductToSetContent').innerHTML = `
         <div class="col-12 mb-3">
@@ -374,6 +402,19 @@ async function addTimeToSetFormSubmit(e) {
                     break;
             };
         };
+    };
+};
+
+async function resetTimeOfSet() {
+    let res = await fetch(`/api/admin/set/${detailsModal.dataset.setId}/time`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (res.ok) {
+        document.location.reload();
     };
 };
 

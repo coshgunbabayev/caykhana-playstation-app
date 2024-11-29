@@ -115,6 +115,18 @@ async function updateProductOfSet(req, res) {
     res.status(200).json({});
 };
 
+async function deleteProductFromSet(req, res) {
+    const { setId, productId } = req.params;
+
+    const set = await getProductDB('id', Number(setId));
+    const structure = JSON.parse(set.structure);
+
+    structure.products = structure.products.filter(product => product.id !== Number(productId));
+
+    await updateProductDB(Number(setId), ['structure'], [JSON.stringify(structure)]);
+    res.status(200).json({});
+};
+
 async function updateTimeOfSet(req, res) {
     const { id } = req.params;
     const { time } = req.body;
@@ -139,10 +151,24 @@ async function updateTimeOfSet(req, res) {
     res.status(200).json({});
 };
 
+async function resetTimeOfSet(req, res) {
+    const { id } = req.params;
+
+    const set = await getProductDB('id', Number(id));
+    const structure = JSON.parse(set.structure);
+
+    structure.time = 0;
+
+    await updateProductDB(Number(id), ['structure'], [JSON.stringify(structure)]);
+    res.status(200).json({});
+};
+
 export {
     createSet,
     updateSet,
     deleteSet,
     updateProductOfSet,
-    updateTimeOfSet
+    deleteProductFromSet,
+    updateTimeOfSet,
+    resetTimeOfSet
 };

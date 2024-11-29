@@ -162,12 +162,12 @@ async function openDetails(id) {
 
     const isActive = table.isHaveOrder || table.isHaveTime;
     let orderSummaryPrice = 0;
+    orderSummaryContent.innerHTML = '';
 
     if (isActive) {
         orderSummary.style.display = 'block';
         const orders = await getOrders(id);
 
-        orderSummaryContent.innerHTML = '';
         orders.forEach(order => {
             const product = products.find(product =>
                 product.id == order.productId
@@ -178,8 +178,7 @@ async function openDetails(id) {
 
             orderSummaryContent.innerHTML += `
                 <div class="d-flex justify-content-between">
-                    <span>${product.name}</span>
-                    <span>${order.quantity} ədəd</span>
+                    <span>${product.name} ( ${order.quantity} ədəd )</span>
                     <span>${price}azn</span>
                 </div>
             `;
@@ -194,15 +193,13 @@ async function openDetails(id) {
 
             orderSummaryContent.innerHTML += `
                 <div class="d-flex justify-content-between">
-                    <span>Playstation</span>
-                    <span>${time.type === 'unlimited' ? 'limitsiz' : time.time + ' saat'}</span>
+                    <span>Playstation ( ${time.type === 'unlimited' ? 'limitsiz' : time.time + ' saat'} )</span>
                     <span>${price}azn</span>
                 </div>
             `;
         };
     } else {
         orderSummary.style.display = 'none';
-        orderSummaryContent.innerHTML = '';
     };
 
     detailsContent.innerHTML = '';

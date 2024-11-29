@@ -4,7 +4,9 @@ const router = new Router();
 import {
     createSet,
     updateSet,
-    deleteSet
+    deleteSet,
+    updateProductOfSet,
+    updateTimeOfSet
 } from '../controllers/admin-set.js';
 
 import {
@@ -17,5 +19,11 @@ router.route('/')
 router.route('/:id')
     .put(authenticateForApi, updateSet)
     .delete(authenticateForApi, deleteSet);
+
+router.route('/:id/product')
+    .put(authenticateForApi, updateProductOfSet);
+
+router.route('/:id/time')
+    .put(authenticateForApi, updateTimeOfSet);
 
 export default router;

@@ -73,6 +73,9 @@ async function closeTable(req, res) {
                 break;
 
             //// settttttttttttt
+
+
+            //// hem de time olacaq
             default:
                 break;
         };

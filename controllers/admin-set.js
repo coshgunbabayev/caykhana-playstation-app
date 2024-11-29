@@ -76,8 +76,59 @@ async function deleteSet(req, res) {
     res.status(200).json({});
 };
 
+async function updateProductOfSet(req, res) {
+    const { id } = req.params;
+    const { productId, quantity } = req.body;
+    const err = new Object();
+
+    if (!productId) {
+        err.product = 'productIsRequired';
+    };
+
+    if (!quantity) {
+        err.quantity = 'quantityIsRequired';
+    };
+
+    if (Object.keys(err).length > 0) {
+        return res.status(400).json(err);
+    };
+
+    const set = await getProductDB('id', Number(id));
+    const structure = JSON.parse(set.structure);
+
+    console.log(structure);///////////////////
+
+    const product = structure.products.find(product => 
+        product.id === Number(productId)
+    ); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    console.log(product);
+    
+
+
+    if (product === undefined) {
+        structure.products.push({
+            id: Number(id),
+            quantity: Number(quantity)
+        });
+    } else {
+        structure.products.find(product => 
+            product.id === Number(productId)
+        ).quantity += Number(quantity);
+    };
+
+    await updateProductDB(Number(id), ['structure'], [JSON.stringify(structure)]);
+    res.status(200).json({});
+};
+
+async function updateTimeOfSet(req, res) {
+
+};
+
 export {
     createSet,
     updateSet,
-    deleteSet
+    deleteSet,
+    updateProductOfSet,
+    updateTimeOfSet
 };

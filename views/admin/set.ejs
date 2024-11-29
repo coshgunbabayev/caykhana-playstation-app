@@ -15,7 +15,7 @@
         <div class="col-4 text-center">Ayarlar</div>
     </div>
 
-    <div id="productList"> </div>
+    <div id="setList"> </div>
 </div>
 
 <!-- yeni set -->
@@ -64,8 +64,37 @@
 </div>
 <!--  -->
 
+<!-- sete bax -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="structureSummary" class="bg-light p-4 rounded shadow-sm mb-4">
+                    <h5 class="text-primary mb-3">Setin tərkibi</h5>
+                    <div id="structureSummaryContent">
+
+                    </div>
+                </div>
+
+                <div id="detailsContent" class="row gy-2 overflow-hidden">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--  -->
+
 <!-- sete elave etmek -->
-<div class="modal fade" id="addToSetModal" tabindex="-1" aria-labelledby="addToSetModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="addToSetModal" tabindex="-1" aria-labelledby="addToSetModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -92,7 +121,7 @@
 
         </div>
     </div>
-</div>
+</div> -->
 <!--  -->
 
 <!-- redakte -->
@@ -113,7 +142,7 @@
                                 <div class="error" id="editNameError"></div>
                             </div>
                         </div>
-                        
+
                         <div class="col-12">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="sale" id="editSale" placeholder="Qiymət">

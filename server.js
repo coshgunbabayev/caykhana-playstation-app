@@ -1,12 +1,23 @@
 import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+
+import { checkTimesLoop } from './tools/time.js';
 
 dotenv.config()
 
 const app = express();
 const port = process.env.PORT || 8000;
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: "*"
+    }
+});
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -18,9 +29,11 @@ app.set('view engine', 'ejs');
 
 app.use(express.static('static'));
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`server is listening on port ${port}`);
 });
+
+checkTimesLoop();
 
 import pageRouter from './routers/page.js';
 import commonRouter from './routers/common.js';
@@ -41,3 +54,7 @@ app.use('/api/admin/set', adminSetRouter);
 app.use('/api/admin/expense', adminExpenseRouter);
 app.use('/api/worker/table', workerTableRouter);
 app.use('/api/worker/product', workerProductRouter);
+
+export {
+    io
+};

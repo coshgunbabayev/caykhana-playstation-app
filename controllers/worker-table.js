@@ -98,7 +98,7 @@ async function closeTable(req, res) {
                 const structure = JSON.parse(product.structure);
                 let setSummaryCostPrice = 0;
 
-                for (let element of structure.products) {
+                for (const element of structure.products) {
                     const setProduct = products.find(product =>
                         product.id === element.id
                     );

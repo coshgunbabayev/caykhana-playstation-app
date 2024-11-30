@@ -19,6 +19,8 @@ const detailsModalInstance = new bootstrap.Modal(detailsModal);
 const addOrderModalInstance = new bootstrap.Modal(addOrderModal);
 const addTimeModalInstance = new bootstrap.Modal(addTimeModal);
 
+const socket = io('http://localhost:8000/');
+
 let currentTableId;
 
 function openModal(modalInstance) {
@@ -432,6 +434,12 @@ async function deleteTime() {
         document.location.reload();
     };  
 };
+
+socket.on('finishedTimes', (data) => {
+    alert(tables.find(table => 
+        table.id === data.id
+    ).name, 'vaxtı bitdi');
+});
 
 async function closeTable(id) {
     if (!confirm('Masa bağlansın?')) {

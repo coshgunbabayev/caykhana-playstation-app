@@ -35,9 +35,9 @@ function displayElements(elements) {
                 contentList.innerHTML += `
                     <div class="row bg-light py-2 rounded border mt-2">
                         <div class="col-4">${element.tableName}</div> 
-                        <div class="col-2">${element.price} azn</div> 
-                        <div class="col-2">${element.price - element.profit} azn</div>  
-                        <div class="col-2">${element.profit} azn</div>
+                        <div class="col-2">${Number(element.price.toFixed(2))} azn</div> 
+                        <div class="col-2">${Number((element.price - element.profit).toFixed(2))} azn</div>  
+                        <div class="col-2">${Number(element.profit.toFixed(2))} azn</div>
                         <div class="col-2">${element.day}.${element.month}.${element.year}</div>
                     </div>
                 `;
@@ -48,10 +48,11 @@ function displayElements(elements) {
             case 'expense':
                 contentList.innerHTML += `
                     <div class="row bg-light py-2 rounded border mt-2">
+
                         <div class="col-4">${element.name}</div> 
                         <div class="col-2">-----</div> 
-                        <div class="col-2">${element.money} azn</div>  
-                        <div class="col-2">${0 - element.money} azn</div>
+                        <div class="col-2">${Number(element.money.toFixed(2))} azn</div>  
+                        <div class="col-2">${0 - Number(element.money.toFixed(2))} azn</div>
                         <div class="col-2">${element.day}.${element.month}.${element.year}</div>
                     </div>
                 `;
@@ -61,7 +62,7 @@ function displayElements(elements) {
         };
     };
 
-    totalMoneyDiv.innerText = `Mənfəət: ${totalMoney} azn`
+    totalMoneyDiv.innerText = `Mənfəət: ${Number(totalMoney.toFixed(2))} azn`
 };
 
 function changeOption(date, type) {

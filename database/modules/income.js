@@ -15,6 +15,8 @@ async function getAllIncomeDB() {
 
 async function createIncomeDB(tableName, price, profit) {
     const now = moment();
+    price = Number(price.toFixed(2));
+    profit = Number(profit.toFixed(2));
     sqlcommand = `INSERT INTO income (tableName, price, profit, day, month, year, date) VALUES ('${tableName}', ${price}, ${profit}, ${now.date()}, ${now.month() + 1}, ${now.year()}, '${(new Date).toISOString()}')`;
     await db.run(sqlcommand, (err) => {
         if (err) {

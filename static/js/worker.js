@@ -76,27 +76,46 @@ async function getCategories() {
     return [];
 };
 
-function placementTables(tableList) {
+async function placementTables(tableList) {
     const foodTables = tableList.filter(table => table.role === 'food');
     const playstationTables = tableList.filter(table => table.role === 'playstation');
     const sortedTables = foodTables.concat(playstationTables);
 
-    function role(role) {
-        if (role === 'playstation') {
-            return 'Playstation';
-        } else if (role === 'food') {
-            return 'Yemək';
-        };
-    };
-
     for (const table of sortedTables) {
+        let orderSummaryPrice = 0;
+
+        async function calculateSummary(id) {
+            const orders = await getOrders(id);
+
+            orders.forEach(order => {
+                const product = products.find(product =>
+                    product.id == order.productId
+                );
+
+                const price = product.sale * order.quantity;
+                orderSummaryPrice += price;
+            });
+
+            if (table.isHaveTime) {
+                const time = await getTime(id);
+                const price = Number((1 * calculateElapsedHours(time.start)).toFixed(2));
+                orderSummaryPrice += price;
+            };
+
+            return orderSummaryPrice
+        };
+
+        if (table.isHaveOrder || table.isHaveTime) {
+            orderSummaryPrice = await calculateSummary(table.id);
+        };
+
         tablesDiv.innerHTML += `
-                <div class="col-auto">
-                    <div class="card custom-card ${table.isHaveOrder || table.isHaveTime ? 'active-custom-card' : ''} border-primary">
+                <div class="col-auto" >
+                    <div id="${table.id}Div" class="card custom-card ${table.isHaveOrder || table.isHaveTime ? 'active-custom-card' : ''} border-primary">
                         <button class="btn btn-primary card-btn" onclick="openDetails(${table.id})">Bax</button>
                         <div class="card-body">
                             <h5 class="card-title fw-bold text-primary">${table.name}</h5>
-                            <h6 class="card-title fw-bold text-primary">${role(table.role)}</h6>
+                            ${table.isHaveOrder || table.isHaveTime ? '<h5 class="card-title fw-bold text-primary">' + orderSummaryPrice + ' azn</h5>' : ''}
                         </div>
                     </div>
                 </div>
@@ -381,7 +400,7 @@ async function deleteOrder(id) {
 
     if (res.ok) {
         document.location.reload();
-    };    
+    };
 };
 
 async function openAddTime(id) {
@@ -432,13 +451,26 @@ async function deleteTime() {
 
     if (res.ok) {
         document.location.reload();
-    };  
+    };
 };
 
-socket.on('finishedTime', (data) => {
-    alert(tables.find(table => 
-        table.id === data.id
-    ).name, 'vaxtı bitdi');
+function notificationForTime(id) {
+    const tableDiv = document.getElementById(`${id}Div`);
+
+    if (Array.from(tableDiv.classList).includes('active-custom-card')) {
+        tableDiv.classList.remove('active-custom-card');
+    } else {
+        tableDiv.classList.add('active-custom-card');
+    };
+};
+
+socket.on('finishedTime', async (data) => {
+    // const audio = await new Audio('/audio/notification.mp3');
+    // audio.play();
+
+    setInterval(async () => {
+        notificationForTime(data.id)
+    }, 0.5 * 1000);
 });
 
 async function closeTable(id) {

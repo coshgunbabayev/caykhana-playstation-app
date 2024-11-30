@@ -124,6 +124,7 @@ async function closeTable(req, res) {
         await deleteTimeDB(time.id);
         if (time !== undefined && time.isSet !== 'true') {
             orderSummaryPrice += Number((1 * (new Date() - new Date(time.start)) / (1000 * 60 * 60)).toFixed(2));
+            orderSummaryProfit += Number((1 * (new Date() - new Date(time.start)) / (1000 * 60 * 60)).toFixed(2));
         };
     };
 
@@ -147,7 +148,7 @@ async function getOrder(req, res) {
 
 async function createOrder(req, res) {
     const { id } = req.params;
-    const { productId, quantity } = req.body;
+    let { productId, quantity } = req.body;
     const err = new Object();
 
     if (!productId) {
@@ -155,7 +156,7 @@ async function createOrder(req, res) {
     };
 
     if (!quantity) {
-        err.quantity = 'quantityIsRequired';
+        quantity = 1
     };
 
     if (Object.keys(err).length > 0) {
@@ -227,11 +228,11 @@ async function getTime(req, res) {
 
 async function createTime(req, res) {
     const { id } = req.params;
-    const { time } = req.body;
+    let { time } = req.body;
     const err = new Object();
 
     if (!time) {
-        err.time = 'timeIsRequired';
+        time = 1
     };
 
     if (Object.keys(err).length > 0) {

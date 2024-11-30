@@ -9,7 +9,7 @@ import {
 function checkTimesLoop() {
     setInterval(async () => {
         checkTimes()
-    }, 2 * 1000);
+    }, 10 * 1000);
 };
 
 async function checkTimes() {

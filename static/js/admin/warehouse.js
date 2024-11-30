@@ -31,7 +31,7 @@ function displayProducts(productList) {
             <div class="col-2">${product.sale} azn</div>
             <div class="col-3 text-center">
                 <button class="btn btn-primary btn-sm mx-1" onclick="increaseProduct(${product.id})">Artır</button>
-                <button class="btn btn-warning btn-sm mx-1" onclick="editProduct(${product.id})">Yenilə</button>
+                <button class="btn btn-warning btn-sm mx-1" onclick="editProduct(${product.id})">Redaktə et</button>
                 <button class="btn btn-danger btn-sm mx-1" onclick="deleteProduct(${product.id})">Sil</button>
             </div>
           </div>

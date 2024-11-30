@@ -4,6 +4,7 @@ const router = new Router();
 import {
     login,
     logout,
+    getAllIncomeAndExpense
 } from '../controllers/admin.js';
 
 import {
@@ -15,5 +16,8 @@ router.route('/login')
 
 router.route('/logout')
     .delete(authenticateForApi, logout);
+
+router.route('/all-income-expense')
+    .get(authenticateForApi, getAllIncomeAndExpense);
 
 export default router;

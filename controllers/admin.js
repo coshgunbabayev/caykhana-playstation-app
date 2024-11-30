@@ -1,5 +1,13 @@
 import jwt from 'jsonwebtoken';
 
+import {
+    getAllIncomeDB
+} from '../database/modules/income.js';
+
+import {
+    getAllExpenseDB
+} from '../database/modules/admin/expense.js';
+
 function login(req, res) {
     try {
         const { password } = req.body;
@@ -42,7 +50,23 @@ function logout(req, res) {
     };
 };
 
+async function getAllIncomeAndExpense(req, res) {
+    const incomes = await getAllIncomeDB();
+    const expenses = await getAllExpenseDB();
+
+    const updatedIncomes = incomes.map(obj => ({ ...obj, type: 'income' }));
+    const updatedExpenses = expenses.map(obj => ({ ...obj, type: 'expense' }));
+
+    let allData = [...updatedIncomes, ...updatedExpenses];
+    allData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    res.status(200).json({
+        allData
+    });
+};
+
 export {
     login,
     logout,
+    getAllIncomeAndExpense
 };

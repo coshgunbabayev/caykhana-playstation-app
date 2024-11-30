@@ -25,14 +25,14 @@ async function getExpenseDB(param, value) {
 };
 
 async function createExpenseDB(name, money) {
-    const now = new Date();
+    const now = moment();
     money = Number(money.toFixed(2));
-    sqlcommand = `INSERT INTO expense (name, money, day, month, year, date) VALUES ('${name}', ${money}, ${now.getDate()}, ${now.getMonth() + 1}, ${now.getFullYear()}, '${now.toISOString()}')`;
+    sqlcommand = `INSERT INTO expense (name, money, day, month, year, date) VALUES ('${name}', ${money}, ${now.date()}, ${now.month() + 1}, ${now.year()}, '${(new Date).toISOString()}')`;
     await db.run(sqlcommand, (err) => {
         if (err) {
 
             console.log(err);
-            
+
             throw new Error('')
         };
     });

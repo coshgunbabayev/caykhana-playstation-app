@@ -22,7 +22,7 @@ async function checkTimes() {
         const currentTime = new Date();
 
         if (updatedTime < currentTime) {
-            io.emit('finishedTimes', {
+            io.emit('finishedTime', {
                 id: time.tableId
             });
         };

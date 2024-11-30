@@ -435,7 +435,7 @@ async function deleteTime() {
     };  
 };
 
-socket.on('finishedTimes', (data) => {
+socket.on('finishedTime', (data) => {
     alert(tables.find(table => 
         table.id === data.id
     ).name, 'vaxtı bitdi');

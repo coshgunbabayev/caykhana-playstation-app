@@ -52,6 +52,7 @@ async function closeTable(req, res) {
     const { id } = req.params;
 
     let orderSummaryPrice = 0;
+    let orderSummaryProfit = 0;
 
     const table = await getTableDB('id', Number(id));
     const products = await getAllProductsDB();
@@ -67,31 +68,66 @@ async function closeTable(req, res) {
 
         switch (product.type) {
             case 'warehouse':
-                await updateProductDB(product.id, ['quantity', 'sold'], [product.quantity - order.quantity, product.sold + order.quantity]);
+                orderSummaryProfit += (product.sale - product.purchase) * order.quantity;
+
+                await updateProductDB(
+                    product.id,
+                    ['quantity', 'sold'],
+                    [product.quantity - order.quantity,
+                    product.sold + order.quantity]
+                );
                 break;
 
             case 'withoutWarehouse':
-                await updateProductDB(product.id, ['sold'], [product.sold + order.quantity]);
+                orderSummaryProfit += product.sale * order.quantity;
+
+                await updateProductDB(
+                    product.id,
+                    ['sold'],
+                    [product.sold + order.quantity]
+                );
                 break;
 
-            //// settttttttttttt
+            case 'set':
+                await updateProductDB(
+                    product.id,
+                    ['sold'],
+                    [product.sold + order.quantity]
+                );
 
+                const structure = JSON.parse(product.structure);
+                let setSummaryCostPrice = 0;
 
-            //// hem de time olacaq
-            default:
+                for (let element of structure.products) {
+                    const setProduct = products.find(product =>
+                        product.id === element.id
+                    );
+
+                    if (setProduct.type === 'warehouse') {
+                        setSummaryCostPrice += setProduct.purchase * element.quantity * order.quantity;
+
+                        await updateProductDB(
+                            element.id,
+                            ['quantity'],
+                            [setProduct.quantity - order.quantity * element.quantity]
+                        );
+                    };
+                };
+
+                orderSummaryProfit = product.sale * order.quantity - setSummaryCostPrice; 
                 break;
         };
     };
 
     if (table.role === 'playstation') {
         const time = await getTimeOneTableDB(Number(id));
-        if (time !== undefined) {
+        await deleteTimeDB(time.id);
+        if (time !== undefined && time.isSet !== 'true') {
             orderSummaryPrice += Number((1 * (new Date() - new Date(time.start)) / (1000 * 60 * 60)).toFixed(2));
-            await deleteTimeDB(time.id);
         };
     };
 
-    await createIncomeDB(table.name, orderSummaryPrice);
+    await createIncomeDB(table.name, orderSummaryPrice, orderSummaryProfit);
 
     res.status(200).json({});
 };

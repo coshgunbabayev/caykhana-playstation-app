@@ -12,8 +12,8 @@ async function getAllIncomeDB() {
     });
 };
 
-async function createIncomeDB(tableName, price) {
-    sqlcommand = `INSERT INTO income (tableName, price) VALUES ('${tableName}', ${price})`;
+async function createIncomeDB(tableName, price, profit) {
+    sqlcommand = `INSERT INTO income (tableName, price, profit) VALUES ('${tableName}', ${price}, ${profit})`;
     await db.run(sqlcommand, (err) => {
         if (err) {
             throw new Error('')

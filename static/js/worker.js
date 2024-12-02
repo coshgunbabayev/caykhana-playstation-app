@@ -216,13 +216,13 @@ async function openDetails(id) {
             const price = product.sale * order.quantity;
             orderSummaryPrice += price;
 
-            starts.push(new Date(order.start));
+            const startTime = new Date(order.start)
+            starts.push(startTime);
 
             orderSummaryContent.innerHTML += `
                 <div class="d-flex justify-content-between mb-3">
-                    <span>${product.name} ( ${order.quantity} ədəd )</span>
+                    <span>${product.name} ( ${order.quantity} ədəd ) ( ${startTime.getHours()}:${startTime.getMinutes()} )</span>
                     <span>${price} azn
-                    
                         ${order.quantity > 1 ? `<button class="btn btn-danger btn-sm mx-1" onclick="deleteOneOrder(${order.id})">Birini sil</button>` : ''}
                         <button class="btn btn-danger btn-sm mx-1" onclick="deleteOrder(${order.id})">Sil</button>
                     </span>
@@ -259,11 +259,12 @@ async function openDetails(id) {
             const price = Number((1 * calculateElapsedHours(time.start)).toFixed(2));
             orderSummaryPrice += price;
 
-            starts.push(new Date(time.start));
+            const startTime = new Date(time.start)
+            starts.push(startTime);
 
             orderSummaryContent.innerHTML += `
                 <div class="d-flex justify-content-between">
-                    <span>Playstation ( ${time.type === 'unlimited' ? 'limitsiz' : time.time + ' saat'} )</span>
+                    <span>Playstation ( ${time.type === 'unlimited' ? 'limitsiz' : time.time + ' saat'} ) ( ${startTime.getHours()}:${startTime.getMinutes()} )</span>
                     <span>${price} azn
                         <button class="btn btn-danger btn-sm mx-1" onclick="deleteTime()">Sil</button>
                     </span>

@@ -272,7 +272,5 @@ async function deleteProduct(id) {
         document.location.reload();
     } else {
         res = await res.json();
-
-        console.log(res);
     };
 };

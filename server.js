@@ -29,7 +29,7 @@ app.set('view engine', 'ejs');
 
 app.use(express.static('static'));
 
-server.listen(port, () => {
+server.listen(port,'0.0.0.0', () => {
     console.log(`server is listening on port ${port}`);
 });
 

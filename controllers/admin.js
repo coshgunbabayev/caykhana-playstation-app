@@ -11,6 +11,9 @@ import {
 function login(req, res) {
     try {
         const { password } = req.body;
+        console.log(req.body);
+
+        console.log(process.env.PASSWORD);
 
         if (!password) {
             return res.status(400).json({

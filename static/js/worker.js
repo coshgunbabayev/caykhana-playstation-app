@@ -1,6 +1,7 @@
 const tablesDiv = document.getElementById('tablesDiv');
 const detailsModal = document.getElementById('detailsModal');
 const orderSummary = document.getElementById('orderSummary');
+const startTime = document.getElementById('startTime');
 const orderSummaryContent = document.getElementById('orderSummaryContent');
 const detailsContent = document.getElementById('detailsContent');
 const addOrderModal = document.getElementById('addOrderModal');
@@ -82,6 +83,7 @@ async function placementTables(tableList) {
     const sortedTables = foodTables.concat(playstationTables);
 
     for (const table of sortedTables) {
+        let starts = new Array();
         let orderSummaryPrice = 0;
 
         async function calculateSummary(id) {
@@ -94,12 +96,16 @@ async function placementTables(tableList) {
 
                 const price = product.sale * order.quantity;
                 orderSummaryPrice += price;
+
+                starts.push(new Date(order.start));
             });
 
             if (table.isHaveTime) {
                 const time = await getTime(id);
                 const price = Number((1 * calculateElapsedHours(time.start)).toFixed(2));
                 orderSummaryPrice += price;
+
+                starts.push(new Date(time.start));
             };
 
             return orderSummaryPrice
@@ -109,17 +115,28 @@ async function placementTables(tableList) {
             orderSummaryPrice = await calculateSummary(table.id);
         };
 
+        let hour, minute
+        if (starts.length > 0) {
+            let minDate = starts.reduce((min, current) => (current < min ? current : min));
+            hour = minDate.getHours();
+            minute = minDate.getMinutes();
+        };
+
         tablesDiv.innerHTML += `
                 <div class="col-auto" >
                     <div id="${table.id}Div" class="card custom-card ${table.isHaveOrder || table.isHaveTime ? 'active-custom-card' : ''} border-primary">
                         <button class="btn btn-primary card-btn" onclick="openDetails(${table.id})">Bax</button>
                         <div class="card-body">
                             <h5 class="card-title fw-bold text-primary">${table.name}</h5>
-                            ${table.isHaveOrder || table.isHaveTime ? '<h5 class="card-title fw-bold text-primary">' + orderSummaryPrice + ' azn</h5>' : ''}
+                            ${table.isHaveOrder || table.isHaveTime ?
+                `<h5 class="card-title fw-bold text-primary">${hour}:${minute}</h5>
+                                <h5 class="card-title fw-bold text-primary">`
+                + orderSummaryPrice + ' azn</h5>' : ''}
                         </div>
                     </div>
                 </div>
             `;
+
     };
 };
 
@@ -189,6 +206,7 @@ async function openDetails(id) {
     if (isActive) {
         orderSummary.style.display = 'block';
         const orders = await getOrders(id);
+        let starts = new Array();
 
         orders.forEach(order => {
             const product = products.find(product =>
@@ -197,6 +215,8 @@ async function openDetails(id) {
 
             const price = product.sale * order.quantity;
             orderSummaryPrice += price;
+
+            starts.push(new Date(order.start));
 
             orderSummaryContent.innerHTML += `
                 <div class="d-flex justify-content-between mb-3">
@@ -239,6 +259,8 @@ async function openDetails(id) {
             const price = Number((1 * calculateElapsedHours(time.start)).toFixed(2));
             orderSummaryPrice += price;
 
+            starts.push(new Date(time.start));
+
             orderSummaryContent.innerHTML += `
                 <div class="d-flex justify-content-between">
                     <span>Playstation ( ${time.type === 'unlimited' ? 'limitsiz' : time.time + ' saat'} )</span>
@@ -248,9 +270,19 @@ async function openDetails(id) {
                 </div>
             `;
         };
+
+        let hour, minute
+        if (starts.length > 0) {
+            let minDate = starts.reduce((min, current) => (current < min ? current : min));
+            hour = minDate.getHours();
+            minute = minDate.getMinutes();
+        };
+
+        startTime.innerText = hour + ':' + minute;
     } else {
         orderSummary.style.display = 'none';
     };
+
 
     detailsContent.innerHTML = '';
 

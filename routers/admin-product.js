@@ -7,6 +7,7 @@ import {
     updateProduct,
     deleteProduct,
     increaseProduct,
+    reduceProduct
 } from '../controllers/admin-product.js';
 
 import {
@@ -25,5 +26,8 @@ router.route('/:id')
 
 router.route('/increase/:id')
     .put(authenticateForApi, increaseProduct);
+
+router.route('/reduce/:id')
+    .put(authenticateForApi, reduceProduct);
 
 export default router;

@@ -109,7 +109,7 @@
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="purchase" id="increasePurchase"
                                     placeholder="Ad">
-                                <label for="increasePurchase" class="form-label">Alış qiyməti</label>
+                                <label for="increasePurchase" class="form-label">Ümumi alış qiyməti</label>
                                 <div class="error" id="increasePurchaseError"></div>
                             </div>
                         </div>
@@ -117,6 +117,55 @@
                         <div class="col-12">
                             <div class="d-grid my-3">
                                 <button class="btn btn-primary btn-lg" type="submit">Artır</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--  -->
+
+<!-- azaltma -->
+<div class="modal fade" id="reduceProductModal" tabindex="-1" aria-labelledby="reduceProductModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="reduceProductModalLabel">Məhsulu azalt</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="reduceProductForm">
+                    <div class="row gy-2 overflow-hidden">
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="quantity" id="reduceQuantity"
+                                    placeholder="Say">
+                                <label for="reduceQuantity" class="form-label">Say</label>
+                                <div class="error" id="reduceQuantityError"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="refund" id="reduceRefund"
+                                    placeholder="Ad">
+                                <label for="reduceRefund" class="form-label">Ümumi geri alınan pul</label>
+                                <div class="error" id="reduceRefundError"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-grid my-3">
+                                <button class="btn btn-primary btn-lg" type="submit">Azalt</button>
                             </div>
                         </div>
 

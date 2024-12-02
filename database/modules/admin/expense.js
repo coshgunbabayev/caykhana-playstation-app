@@ -30,9 +30,6 @@ async function createExpenseDB(name, money) {
     sqlcommand = `INSERT INTO expense (name, money, day, month, year, date) VALUES ('${name}', ${money}, ${now.date()}, ${now.month() + 1}, ${now.year()}, '${(new Date).toISOString()}')`;
     await db.run(sqlcommand, (err) => {
         if (err) {
-
-            console.log(err);
-
             throw new Error('')
         };
     });

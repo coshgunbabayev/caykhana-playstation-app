@@ -465,9 +465,6 @@ function notificationForTime(id) {
 };
 
 socket.on('finishedTime', async (data) => {
-    // const audio = await new Audio('/audio/notification.mp3');
-    // audio.play();
-
     setInterval(async () => {
         notificationForTime(data.id)
     }, 0.5 * 1000);

@@ -1,6 +1,7 @@
 const productListDiv = document.getElementById('productList');
 const addProductForm = document.getElementById('addProductForm');
 const increaseProductForm = document.getElementById('increaseProductForm');
+const reduceProductForm = document.getElementById('reduceProductForm');
 const editProductForm = document.getElementById('editProductForm');
 const searchInput = document.getElementById('searchInput');
 const categoryOption = document.getElementById('categoryOption');
@@ -14,6 +15,10 @@ const increaseQuantityInput = document.getElementById('increaseQuantity');
 const increaseQuantityError = document.getElementById('increaseQuantityError');
 const increasePurchaseİnput = document.getElementById('increasePurchase');
 const increasePurchaseError = document.getElementById('increasePurchaseError');
+const reduceQuantityInput = document.getElementById('reduceQuantity');
+const reduceQuantityError = document.getElementById('reduceQuantityError');
+const reduceRefundInput = document.getElementById('reduceRefund');
+const reduceRefundError = document.getElementById('reduceRefundError');
 const editNameInput = document.getElementById('editName');
 const editNameError = document.getElementById('editNameError');
 const editSaleInput = document.getElementById('editSale');
@@ -25,12 +30,13 @@ function displayProducts(productList) {
         productListDiv.innerHTML += `
           <div class="row bg-light py-2 rounded border mt-2">
             <div class="col-2">${product.name}</div> 
-            <div class="col-2">${product.category}</div> 
+            <div class="col-2">${categories.find(category => category.en === product.category).az}</div> 
             <div class="col-1">${product.quantity}</div>  
             <div class="col-2">${product.purchase} azn</div>
             <div class="col-2">${product.sale} azn</div>
             <div class="col-3 text-center">
                 <button class="btn btn-primary btn-sm mx-1" onclick="increaseProduct(${product.id})">Artır</button>
+                <button class="btn btn-primary btn-sm mx-1" onclick="reduceProduct(${product.id})">Azalt</button>
                 <button class="btn btn-warning btn-sm mx-1" onclick="editProduct(${product.id})">Redaktə et</button>
                 <button class="btn btn-danger btn-sm mx-1" onclick="deleteProduct(${product.id})">Sil</button>
             </div>
@@ -202,6 +208,11 @@ increaseProductForm.addEventListener('submit', async (e) => {
     const formData = new FormData(increaseProductForm);
     const productId = increaseProductForm.dataset.productId;
 
+    increaseQuantityInput.style.borderColor = '#ced4da';
+    increasePurchaseİnput.style.borderColor = '#ced4da';
+    increaseQuantityError.innerText = '';
+    increasePurchaseError.innerText = '';
+
     let res = await fetch(`/api/admin/product/increase/${productId}`, {
         method: 'PUT',
         headers: {
@@ -217,7 +228,128 @@ increaseProductForm.addEventListener('submit', async (e) => {
         document.location.reload()
     } else {
         res = await res.json();
-        console.log(res);
+
+        if (res.quantity) {
+            increaseQuantityInput.style.borderColor = 'rgb(255, 0, 0)';
+            switch (res.quantity) {
+                case 'quantityIsRequired':
+                    increaseQuantityError.innerText = 'Say məcburidir';
+                    break;
+
+                case 'quantityIsNotNumber':
+                    increaseQuantityError.innerText = 'Say ədəd olmalıdır';
+                    break;
+
+                case 'quantityIsNotWholeNumber':
+                    increaseQuantityError.innerText = 'Say tam ədəd olmalıdır';
+                    break;
+
+                case 'quantityIsNotPositive':
+                    increaseQuantityError.innerText = 'Say müsbət ədəd olmalıdır';
+                    break;
+            };
+        };
+
+        if (res.purchase) {
+            increasePurchaseİnput.style.borderColor = 'rgb(255, 0, 0)';
+            switch (res.purchase) {
+                case 'purchaseIsRequired':
+                    increasePurchaseError.innerText = 'Ümumi alış qiyməti məcburidir';
+                    break;
+
+                case 'purchaseIsNotNumber':
+                    increasePurchaseError.innerText = 'Ümumi alış qiyməti ədəd olmalıdır';
+                    break;
+
+                case 'purchaseIsNotPositive':
+                    increasePurchaseError.innerText = 'Ümumi alış qiyməti müsbət ədəd olmalıdır';
+                    break;
+            };
+        };
+    };
+});
+
+function reduceProduct(id) {
+    const product = products.find(product => product.id === id);
+    if (!product) return;
+
+    reduceProductForm.dataset.productId = id;
+
+    new bootstrap.Modal(document.getElementById('reduceProductModal')).show();
+};
+
+reduceProductForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(reduceProductForm);
+    const productId = reduceProductForm.dataset.productId;
+
+    reduceQuantityInput.style.borderColor = '#ced4da';
+    reduceRefundInput.style.borderColor = '#ced4da';
+    reduceQuantityError.innerText = '';
+    reduceRefundError.innerText = '';
+
+    let res = await fetch(`/api/admin/product/reduce/${productId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            quantity: formData.get('quantity'),
+            refund: formData.get('refund')
+        })
+    });
+
+    if (res.ok) {
+        document.location.reload()
+    } else {
+        res = await res.json();
+
+        if (res.quantity) {
+            reduceQuantityInput.style.borderColor = 'rgb(255, 0, 0)';
+            switch (res.quantity) {
+                case 'quantityIsRequired':
+                    reduceQuantityError.innerText = 'Say məcburidir';
+                    break;
+
+                case 'quantityIsNotNumber':
+                    reduceQuantityError.innerText = 'Say ədəd olmalıdır';
+                    break;
+
+                case 'quantityIsNotWholeNumber':
+                    reduceQuantityError.innerText = 'Say tam ədəd olmalıdır';
+                    break;
+
+                case 'quantityIsNotPositive':
+                    reduceQuantityError.innerText = 'Say müsbət ədəd olmalıdır';
+                    break;
+            };
+        };
+
+        if (res.refund) {
+            reduceRefundInput.style.borderColor = 'rgb(255, 0, 0)';
+            switch (res.refund) {
+                case 'refundIsRequired':
+                    reduceRefundError.innerText = 'Ümumi geri alınan pul məcburidir';
+                    break;
+
+                case 'refundIsNotNumber':
+                    reduceRefundError.innerText = 'Ümumi geri alınan pul ədəd olmalıdır';
+                    break;
+
+                case 'refundIsNotPositive':
+                    reduceRefundError.innerText = 'Ümumi geri alınan pul mənfi ədəd ola bilməz';
+                    break;
+            };
+        };
+
+        if (res.refund) {
+            switch (res.refund) {
+                case 'refundIsRequired':
+                    reduceRefundError.innerText = 'Qaytarılma seçimini seçmək məcburidir';
+                    break;
+            };
+        };
     };
 });
 

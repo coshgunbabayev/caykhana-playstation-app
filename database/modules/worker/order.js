@@ -33,7 +33,8 @@ async function getOrderDB(param, value) {
 };
 
 async function createOrderDB(tableId, productId, quantity) {
-    sqlcommand = `INSERT INTO "order" (tableId, productId, quantity) VALUES (${tableId}, ${productId}, ${quantity})`;
+    const now = new Date().toISOString();
+    sqlcommand = `INSERT INTO "order" (tableId, productId, quantity, start) VALUES (${tableId}, ${productId}, ${quantity}, '${now}')`;
     await db.run(sqlcommand, (err) => {
         if (err) {
             console.log(err);
